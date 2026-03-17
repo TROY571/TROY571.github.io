@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TROY571 | SF Crime Data Visualizations</title>
+  <meta name="description" content="Portfolio of San Francisco crime data visualizations built for course 02806.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg-soft: #121d33;
+      --panel: #16243f;
+      --text: #e8eef8;
+      --muted: #9fb2cc;
+      --accent: #2ec4b6;
+      --accent-2: #ff7a59;
+      --border: #2a3a5e;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 85% -10%, rgba(46, 196, 182, 0.18), transparent 55%),
+        radial-gradient(900px 700px at -10% 0%, rgba(255, 122, 89, 0.15), transparent 50%),
+        var(--bg);
+      font-family: "Sora", "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(11, 18, 32, 0.72);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner,
+    .container {
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .brand {
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    header {
+      padding: 68px 0 34px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, rgba(22, 36, 63, 0.96), rgba(18, 29, 51, 0.94));
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) + 8px);
+      padding: clamp(24px, 4vw, 42px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -60px;
+      top: -100px;
+      background: radial-gradient(circle, rgba(46, 196, 182, 0.24), transparent 70%);
+      pointer-events: none;
+    }
+
+    .label {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+    h2 { font-size: clamp(1.3rem, 2.2vw, 1.8rem); margin-bottom: 16px; }
+
+    .intro {
+      max-width: 760px;
+      color: #d5e0f1;
+      margin: 0 0 18px;
+      font-family: "IBM Plex Serif", serif;
+      font-size: clamp(1.02rem, 1.5vw, 1.15rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      text-decoration: none;
+      color: #03131f;
+      background: var(--accent);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(46, 196, 182, 0.24);
+    }
+
+    main {
+      padding-bottom: 60px;
+    }
+
+    section {
+      margin-top: 42px;
+    }
+
+    .section-card {
+      background: rgba(16, 26, 45, 0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(18px, 2.6vw, 28px);
+    }
+
+    .muted { color: var(--muted); margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .viz-card {
+      grid-column: span 6;
+      background: linear-gradient(165deg, rgba(23, 35, 58, 0.95), rgba(19, 30, 49, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .viz-card:hover {
+      transform: translateY(-3px);
+      border-color: #3d5d8d;
+    }
+
+    .viz-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #0d1729;
+    }
+
+    .viz-body {
+      padding: 14px 14px 16px;
+    }
+
+    .viz-body h3 {
+      margin: 0 0 7px;
+      font-size: 1.02rem;
+    }
+
+    .viz-body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .interactive-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .embed-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0f1a30;
+    }
+
+    .embed-top {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .embed-top strong { font-size: 0.95rem; }
+
+    .embed-top a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 420px;
+      border: 0;
+      display: block;
+      background: #091224;
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding-left: 1.1rem;
+      color: #d8e5f8;
+    }
+
+    footer {
+      width: min(var(--max), 92vw);
+      margin: 24px auto 40px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 980px) {
+      .viz-card { grid-column: span 12; }
+      .interactive-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar-inner { gap: 8px; align-items: flex-start; flex-direction: column; }
+      header { padding-top: 42px; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">TROY571.github.io</div>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#static-viz">Static Visuals</a>
+        <a href="#interactive-viz">Interactive</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="hero">
+        <span class="label">Data Story Platform</span>
+        <h1>San Francisco Crime Visualizations</h1>
+        <p class="intro">
+          This site publishes course visualizations from the SF crime dataset. It starts with static analytical plots and is ready
+          for interactive Plotly and Folium embeds in the same layout.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#static-viz">Browse Charts</a>
+          <a class="btn secondary" href="#interactive-viz">Open Interactive Section</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="static-viz" class="section-card">
+      <h2>Static Visualizations</h2>
+      <p class="muted">Exported PNG figures from Week 1 and Week 3 notebooks.</p>
+      <div class="grid">
+        <article class="viz-card">
+          <img src="assets/images/yearly_counts.png" alt="Yearly crime trend plot">
+          <div class="viz-body">
+            <h3>Yearly Crime Counts</h3>
+            <p>High-level trend overview across years.</p>
+          </div>
+        </article>
+        <article class="viz-card">
+          <img src="assets/images/district_trends.png" alt="District-level trend plot">
+          <div class="viz-body">
+            <h3>District Trends</h3>
+            <p>Comparative crime patterns by district.</p>
+          </div>
+        </article>
+        <article class="viz-card">
+          <img src="assets/images/crime_types.png" alt="Crime type comparison plot">
+          <div class="viz-body">
+            <h3>Crime Type Comparison</h3>
+            <p>Distribution contrast across offense categories.</p>
+          </div>
+        </article>
+        <article class="viz-card">
+          <img src="assets/images/daily_boxplot.png" alt="Daily boxplot of crime counts">
+          <div class="viz-body">
+            <h3>Daily Boxplot</h3>
+            <p>Variability and spread in daily counts.</p>
+          </div>
+        </article>
+        <article class="viz-card">
+          <img src="assets/images/time_boxplot.png" alt="Time-based boxplot">
+          <div class="viz-body">
+            <h3>Time-of-Day Boxplot</h3>
+            <p>Temporal concentration and dispersion by hour.</p>
+          </div>
+        </article>
+        <article class="viz-card">
+          <img src="assets/images/probability_plots.png" alt="Probability analysis plots">
+          <div class="viz-body">
+            <h3>Probability Analysis</h3>
+            <p>Probabilistic view of crime occurrence behavior.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="interactive-viz" class="section-card">
+      <h2>Interactive Visualizations</h2>
+      <p class="muted">These cards are already wired. Replace the placeholder pages in <code>visualizations/</code> with your exported files.</p>
+      <div class="interactive-grid">
+        <article class="embed-card">
+          <div class="embed-top">
+            <strong>Hourly Crime (Plotly)</strong>
+            <a href="visualizations/crime_hourly_interactive.html">Open full page</a>
+          </div>
+          <iframe src="visualizations/crime_hourly_interactive.html" title="Plotly interactive chart"></iframe>
+        </article>
+        <article class="embed-card">
+          <div class="embed-top">
+            <strong>Crime Heatmap (Folium)</strong>
+            <a href="visualizations/sf_crime_heatmap.html">Open full page</a>
+          </div>
+          <iframe src="visualizations/sf_crime_heatmap.html" title="Folium interactive map"></iframe>
+        </article>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section-card">
+      <h2>Publish Checklist</h2>
+      <ol class="roadmap">
+        <li>Replace <code>visualizations/crime_hourly_interactive.html</code> with your real Plotly export.</li>
+        <li>Replace <code>visualizations/sf_crime_heatmap.html</code> with your real Folium export.</li>
+        <li>Commit and push to <code>main</code>; GitHub Pages will deploy automatically.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    Built for course 02806 by TROY571. Source repo: <code>TROY571.github.io</code>.
+  </footer>
+</body>
+</html>
