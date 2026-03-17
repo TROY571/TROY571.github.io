@@ -378,7 +378,7 @@
 
     <section id="interactive-viz" class="section-card">
       <h2>Interactive Visualizations</h2>
-      <p class="muted">These cards are already wired. Replace the placeholder pages in <code>visualizations/</code> with your exported files.</p>
+      <p class="muted">Interactive pages are now built from aggregated dataset files in <code>data/</code> and loaded directly on this site.</p>
       <div class="interactive-grid">
         <article class="embed-card">
           <div class="embed-top">
@@ -389,20 +389,20 @@
         </article>
         <article class="embed-card">
           <div class="embed-top">
-            <strong>Crime Heatmap (Folium)</strong>
+            <strong>Crime Heatmap (Leaflet)</strong>
             <a href="visualizations/sf_crime_heatmap.html">Open full page</a>
           </div>
-          <iframe src="visualizations/sf_crime_heatmap.html" title="Folium interactive map"></iframe>
+          <iframe src="visualizations/sf_crime_heatmap.html" title="Interactive crime heatmap map"></iframe>
         </article>
       </div>
     </section>
 
     <section id="roadmap" class="section-card">
-      <h2>Publish Checklist</h2>
+      <h2>Data Pipeline</h2>
       <ol class="roadmap">
-        <li>Replace <code>visualizations/crime_hourly_interactive.html</code> with your real Plotly export.</li>
-        <li>Replace <code>visualizations/sf_crime_heatmap.html</code> with your real Folium export.</li>
-        <li>Commit and push to <code>main</code>; GitHub Pages will deploy automatically.</li>
+        <li>Source file: <code>Combined_incidents_2003-present.csv</code> (processed locally).</li>
+        <li>Derived web data: <code>data/weekday_hour_heatmap.json</code>, <code>data/hourly_top_categories.json</code>, <code>data/crime_hotspots.json</code>.</li>
+        <li>Front-end rendering: Plotly for temporal patterns and Leaflet heatmap for spatial hotspots.</li>
       </ol>
     </section>
   </main>
