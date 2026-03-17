@@ -7,16 +7,15 @@
   <meta name="description" content="Portfolio of San Francisco crime data visualizations built for course 02806.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Serif:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
       --bg: #0b1220;
-      --bg-soft: #121d33;
       --panel: #16243f;
       --text: #e8eef8;
       --muted: #9fb2cc;
       --accent: #2ec4b6;
-      --accent-2: #ff7a59;
       --border: #2a3a5e;
       --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
       --radius: 18px;
@@ -45,8 +44,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .topbar-inner,
-    .container {
+    .topbar-inner, .container {
       width: min(var(--max), 92vw);
       margin: 0 auto;
     }
@@ -169,13 +167,8 @@
       box-shadow: 0 10px 22px rgba(46, 196, 182, 0.24);
     }
 
-    main {
-      padding-bottom: 60px;
-    }
-
-    section {
-      margin-top: 42px;
-    }
+    main { padding-bottom: 60px; }
+    section { margin-top: 42px; }
 
     .section-card {
       background: rgba(16, 26, 45, 0.9);
@@ -214,66 +207,54 @@
       background: #0d1729;
     }
 
-    .viz-body {
-      padding: 14px 14px 16px;
-    }
+    .viz-body { padding: 14px 14px 16px; }
+    .viz-body h3 { margin: 0 0 7px; font-size: 1.02rem; }
+    .viz-body p { margin: 0; color: var(--muted); font-size: 0.93rem; }
 
-    .viz-body h3 {
-      margin: 0 0 7px;
-      font-size: 1.02rem;
-    }
-
-    .viz-body p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-
-    .interactive-grid {
+    .interactive-layout {
       display: grid;
+      grid-template-columns: repeat(12, 1fr);
       gap: 14px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .embed-card {
+    .interactive-card {
       border: 1px solid var(--border);
       border-radius: 14px;
+      background: linear-gradient(165deg, rgba(23, 35, 58, 0.95), rgba(19, 30, 49, 0.95));
       overflow: hidden;
-      background: #0f1a30;
+      grid-column: span 6;
     }
 
-    .embed-top {
+    .interactive-card.full { grid-column: span 12; }
+
+    .interactive-top {
       padding: 12px 14px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .embed-top strong { font-size: 0.95rem; }
-
-    .embed-top a {
-      color: var(--accent);
-      text-decoration: none;
       font-weight: 700;
-      font-size: 0.86rem;
+      font-size: 0.95rem;
     }
 
-    iframe {
+    .interactive-body { padding: 10px; }
+
+    .plot-canvas {
       width: 100%;
-      height: 420px;
-      border: 0;
-      display: block;
-      background: #091224;
+      height: 360px;
+      background: #0e1a31;
+      border-radius: 10px;
     }
 
-    .roadmap {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding-left: 1.1rem;
-      color: #d8e5f8;
+    #hotspot-map {
+      width: 100%;
+      height: 460px;
+      background: #0e1a31;
+      border-radius: 10px;
+    }
+
+    .status {
+      margin-top: 8px;
+      color: #ffd2a7;
+      font-size: 0.84rem;
+      min-height: 1.2em;
     }
 
     footer {
@@ -287,7 +268,7 @@
 
     @media (max-width: 980px) {
       .viz-card { grid-column: span 12; }
-      .interactive-grid { grid-template-columns: 1fr; }
+      .interactive-card, .interactive-card.full { grid-column: span 12; }
     }
 
     @media (max-width: 620px) {
@@ -304,7 +285,6 @@
       <nav class="nav-links" aria-label="Sections">
         <a href="#static-viz">Static Visuals</a>
         <a href="#interactive-viz">Interactive</a>
-        <a href="#roadmap">Roadmap</a>
       </nav>
     </div>
   </div>
@@ -315,8 +295,7 @@
         <span class="label">Data Story Platform</span>
         <h1>San Francisco Crime Visualizations</h1>
         <p class="intro">
-          This site publishes course visualizations from the SF crime dataset. It starts with static analytical plots and is ready
-          for interactive Plotly and Folium embeds in the same layout.
+          This site publishes course visualizations from the SF crime dataset, combining static plots with interactive exploration of temporal and spatial patterns.
         </p>
         <div class="hero-actions">
           <a class="btn" href="#static-viz">Browse Charts</a>
@@ -333,82 +312,156 @@
       <div class="grid">
         <article class="viz-card">
           <img src="assets/images/yearly_counts.png" alt="Yearly crime trend plot">
-          <div class="viz-body">
-            <h3>Yearly Crime Counts</h3>
-            <p>High-level trend overview across years.</p>
-          </div>
+          <div class="viz-body"><h3>Yearly Crime Counts</h3><p>High-level trend overview across years.</p></div>
         </article>
         <article class="viz-card">
           <img src="assets/images/district_trends.png" alt="District-level trend plot">
-          <div class="viz-body">
-            <h3>District Trends</h3>
-            <p>Comparative crime patterns by district.</p>
-          </div>
+          <div class="viz-body"><h3>District Trends</h3><p>Comparative crime patterns by district.</p></div>
         </article>
         <article class="viz-card">
           <img src="assets/images/crime_types.png" alt="Crime type comparison plot">
-          <div class="viz-body">
-            <h3>Crime Type Comparison</h3>
-            <p>Distribution contrast across offense categories.</p>
-          </div>
+          <div class="viz-body"><h3>Crime Type Comparison</h3><p>Distribution contrast across offense categories.</p></div>
         </article>
         <article class="viz-card">
           <img src="assets/images/daily_boxplot.png" alt="Daily boxplot of crime counts">
-          <div class="viz-body">
-            <h3>Daily Boxplot</h3>
-            <p>Variability and spread in daily counts.</p>
-          </div>
+          <div class="viz-body"><h3>Daily Boxplot</h3><p>Variability and spread in daily counts.</p></div>
         </article>
         <article class="viz-card">
           <img src="assets/images/time_boxplot.png" alt="Time-based boxplot">
-          <div class="viz-body">
-            <h3>Time-of-Day Boxplot</h3>
-            <p>Temporal concentration and dispersion by hour.</p>
-          </div>
+          <div class="viz-body"><h3>Time-of-Day Boxplot</h3><p>Temporal concentration and dispersion by hour.</p></div>
         </article>
         <article class="viz-card">
           <img src="assets/images/probability_plots.png" alt="Probability analysis plots">
-          <div class="viz-body">
-            <h3>Probability Analysis</h3>
-            <p>Probabilistic view of crime occurrence behavior.</p>
-          </div>
+          <div class="viz-body"><h3>Probability Analysis</h3><p>Probabilistic view of crime occurrence behavior.</p></div>
         </article>
       </div>
     </section>
 
     <section id="interactive-viz" class="section-card">
       <h2>Interactive Visualizations</h2>
-      <p class="muted">Interactive pages are now built from aggregated dataset files in <code>data/</code> and loaded directly on this site.</p>
-      <div class="interactive-grid">
-        <article class="embed-card">
-          <div class="embed-top">
-            <strong>Hourly Crime (Plotly)</strong>
-            <a href="visualizations/crime_hourly_interactive.html">Open full page</a>
+      <p class="muted">Rendered directly on this page from local JSON data files.</p>
+      <div class="interactive-layout">
+        <article class="interactive-card">
+          <div class="interactive-top">Hour x Weekday Intensity</div>
+          <div class="interactive-body">
+            <div id="weekday-heatmap" class="plot-canvas"></div>
+            <div id="status-heatmap" class="status"></div>
           </div>
-          <iframe src="visualizations/crime_hourly_interactive.html" title="Plotly interactive chart"></iframe>
         </article>
-        <article class="embed-card">
-          <div class="embed-top">
-            <strong>Crime Heatmap (Leaflet)</strong>
-            <a href="visualizations/sf_crime_heatmap.html">Open full page</a>
+
+        <article class="interactive-card">
+          <div class="interactive-top">Top Crime Categories by Hour</div>
+          <div class="interactive-body">
+            <div id="category-lines" class="plot-canvas"></div>
+            <div id="status-lines" class="status"></div>
           </div>
-          <iframe src="visualizations/sf_crime_heatmap.html" title="Interactive crime heatmap map"></iframe>
+        </article>
+
+        <article class="interactive-card full">
+          <div class="interactive-top">Spatial Hotspots Map</div>
+          <div class="interactive-body">
+            <div id="hotspot-map"></div>
+            <div id="status-map" class="status"></div>
+          </div>
         </article>
       </div>
-    </section>
-
-    <section id="roadmap" class="section-card">
-      <h2>Data Pipeline</h2>
-      <ol class="roadmap">
-        <li>Source file: <code>Combined_incidents_2003-present.csv</code> (processed locally).</li>
-        <li>Derived web data: <code>data/weekday_hour_heatmap.json</code>, <code>data/hourly_top_categories.json</code>, <code>data/crime_hotspots.json</code>.</li>
-        <li>Front-end rendering: Plotly for temporal patterns and Leaflet heatmap for spatial hotspots.</li>
-      </ol>
     </section>
   </main>
 
   <footer>
-    Built for course 02806 by TROY571. Source repo: <code>TROY571.github.io</code>.
+    Built for course 02806 by TROY571.
   </footer>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script>
+    function setStatus(id, text) {
+      document.getElementById(id).textContent = text || "";
+    }
+
+    async function loadJson(path) {
+      const res = await fetch(path, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to load " + path + " (" + res.status + ")");
+      return res.json();
+    }
+
+    async function drawPlotly() {
+      try {
+        const [heat, cat] = await Promise.all([
+          loadJson("data/weekday_hour_heatmap.json"),
+          loadJson("data/hourly_top_categories.json")
+        ]);
+
+        Plotly.newPlot("weekday-heatmap", [{
+          type: "heatmap",
+          z: heat.z,
+          x: heat.hours,
+          y: heat.weekdays,
+          colorscale: "YlOrRd",
+          hovertemplate: "%{y}<br>%{x}<br>Incidents: %{z}<extra></extra>"
+        }], {
+          margin: { l: 80, r: 14, t: 8, b: 46 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(0,0,0,0)",
+          font: { color: "#e8eef8" },
+          xaxis: { title: "Hour", tickangle: -35, gridcolor: "#203153" },
+          yaxis: { title: "Weekday", gridcolor: "#203153" }
+        }, { responsive: true, displaylogo: false });
+
+        const lineTraces = cat.series.map((s) => ({
+          type: "scatter",
+          mode: "lines",
+          name: s.name + " (" + s.total.toLocaleString() + ")",
+          x: cat.hours,
+          y: s.values,
+          hovertemplate: "%{fullData.name}<br>%{x}: %{y}<extra></extra>"
+        }));
+
+        Plotly.newPlot("category-lines", lineTraces, {
+          margin: { l: 58, r: 18, t: 8, b: 46 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(0,0,0,0)",
+          font: { color: "#e8eef8" },
+          xaxis: { title: "Hour", tickangle: -35, gridcolor: "#203153" },
+          yaxis: { title: "Incidents", gridcolor: "#203153" },
+          legend: { orientation: "h", y: 1.14 }
+        }, { responsive: true, displaylogo: false });
+      } catch (err) {
+        console.error(err);
+        setStatus("status-heatmap", "Heatmap data failed to load.");
+        setStatus("status-lines", "Line chart data failed to load.");
+      }
+    }
+
+    async function drawMap() {
+      const map = L.map("hotspot-map", { zoomControl: true, minZoom: 10, maxZoom: 17 }).setView([37.7749, -122.4194], 12);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+
+      try {
+        const hot = await loadJson("data/crime_hotspots.json");
+        const max = hot.max || 1;
+        const heatPoints = hot.points.map((p) => [p.lat, p.lon, Math.max(0.08, p.count / max)]);
+
+        L.heatLayer(heatPoints, {
+          radius: 17,
+          blur: 14,
+          maxZoom: 16,
+          gradient: { 0.2: "#3ddad7", 0.45: "#ffd166", 0.7: "#f77f00", 1.0: "#d62828" }
+        }).addTo(map);
+
+        setStatus("status-map", "Hotspot cells loaded: " + hot.points.length.toLocaleString());
+      } catch (err) {
+        console.error(err);
+        setStatus("status-map", "Map data failed to load.");
+      }
+    }
+
+    drawPlotly();
+    drawMap();
+  </script>
 </body>
 </html>
