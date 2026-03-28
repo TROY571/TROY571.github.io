@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TROY571 | A Short SF Crime Data Story</title>
-  <meta name="description" content="A short magazine-style data story about temporal and spatial concentration in San Francisco crime incidents.">
+  <title>TROY571 | A Short Data Story on Larceny Theft</title>
+  <meta name="description" content="A short magazine-style data story about how larceny theft clusters in time and space in San Francisco.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -296,11 +296,11 @@
     <header>
       <section class="hero">
         <span class="eyebrow">Short Data Story</span>
-        <h1>Crime in San Francisco is concentrated, not random</h1>
+        <h1>Larceny theft in San Francisco follows a very specific rhythm</h1>
         <p class="standfirst">
-          The combined SFPD incident dataset contains more than three million recorded incidents from 2003 onward. Read as a whole,
-          it does not show crime spreading evenly across the city or across the day. It shows concentration: in a few years, in a
-          few hours, and in a few places. This story follows that pattern from annual totals to daily rhythm to geographic hotspot.
+          I focus on one crime type: <strong>Larceny Theft</strong>. In the combined SFPD incident dataset, it is one of the clearest examples
+          of how recorded crime concentrates instead of spreading evenly. The pattern is visible in three ways: a sharp break after the
+          late 2010s, a strong midday-to-evening rhythm, and a map that concentrates around a limited part of the city.
         </p>
       </section>
     </header>
@@ -311,59 +311,59 @@
           <h2>Dataset and framing</h2>
           <p>
             The data comes from San Francisco Police Department incident reports that were cleaned and combined during the course.
-            Each row is a recorded incident, not a direct measure of harm, victimization, or resident behavior. That distinction matters:
-            changes in policing, reporting practices, and record systems can move the counts even when underlying behavior changes less.
+            Each row is a recorded incident, not a direct measure of victimization. That matters because changes in reporting, policing,
+            or record-keeping can move the numbers even when underlying behavior changes less.
           </p>
           <p>
-            With that caveat in place, the dataset is still useful for asking where incidents accumulate and when they tend to happen.
-            Those are the questions this page focuses on.
+            I use <strong>Larceny Theft</strong> because it already stood out in my earlier analysis and because it makes the concentration pattern easy to see.
+            For the annual chart, I focus on 2018-2024, where this category is cleanest in the combined dataset. The goal of the page is not to explain every cause,
+            but to show where the pattern is strong and where interpretation has to stay careful.
           </p>
         </div>
         <aside class="note-card">
           <h3>Story claim</h3>
           <p>
-            The strongest signal in this dataset is concentration. Recorded incidents cluster into specific years, specific hours, and
-            specific central-city locations. That makes a general citywide average less informative than a targeted view of time and place.
+            Larceny theft is not spread evenly across the city or across the day. In this dataset it clusters into specific years, peaks from late morning to evening,
+            and piles up in a small set of districts and hotspot cells.
           </p>
         </aside>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>1. Annual totals move, but not in a straight line</h2>
+          <h2>1. Larceny theft breaks sharply after 2019</h2>
           <p>
-            A first look at the full series shows why a single headline like "crime went up" or "crime went down" is too simple. The
-            counts are relatively high in the mid-2000s, surge again in the late 2010s, and then drop sharply after 2018. The decline
-            after 2020 is real in the recorded data, but it should still be read carefully because recorded incidents can change for
-            administrative reasons as well as social ones.
+            The first figure starts with the simplest question: how much larceny theft is being recorded each year? The answer is not a smooth trend.
+            The category stays extremely high in 2018 and 2019, then drops hard in 2020 and never climbs back to that earlier level by 2024.
+            That alone makes the late-2010s period look unusual.
           </p>
           <p>
-            Even with that caution, the chart establishes an important baseline: the dataset has distinct phases rather than one stable
-            average. That is the first sign that crime in this dataset is concentrated rather than evenly distributed over time.
+            I do not want to overclaim what that break means. A drop in recorded theft does not automatically prove that theft opportunity or offender behavior changed by the same amount.
+            Pandemic-era closures, mobility changes, and reporting effects could all matter. Still, the recorded series clearly splits into a pre-2020 high period and a lower post-2020 one.
           </p>
         </div>
         <figure>
-          <img src="assets/images/story_yearly_trend.svg" alt="Bar chart of San Francisco incidents by year from 2003 to 2024">
+          <img src="assets/images/story_yearly_trend.svg" alt="Bar chart of larceny theft counts from 2018 to 2024">
           <figcaption>
             <span class="caption-label">Figure 1</span>
-            Annual incident counts for 2003-2024. The 2018 spike and the post-2020 drop stand out immediately, which is why later charts
-            should be read as patterns inside a changing overall baseline rather than as isolated snapshots.
+            Annual <em>Larceny Theft</em> counts for 2018-2024. The category is very high in 2018-2019, drops in 2020, and remains below its late-2010s level afterward.
+            This is the baseline for the rest of the story: later charts ask when and where this lower-but-still-concentrated theft pattern appears.
           </figcaption>
         </figure>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>2. The yearly total hides a strong daily rhythm</h2>
+          <h2>2. The category follows a strong daytime and evening cycle</h2>
           <p>
-            Once the data is broken into weekday and hour, a much sharper structure appears. Incidents do not arrive uniformly across the
-            24-hour cycle. Instead, they build into clear peaks, and different categories contribute to those peaks in different ways.
-            Theft-related categories have a strong evening profile, while the overall heatmap shows that some weekday-hour combinations
-            consistently absorb more incidents than others.
+            The annual chart shows a break across years, but it hides something just as important: <em>when</em> larceny theft is recorded. The interactive figure below shows
+            that the category is heavily concentrated from late morning into the evening, with particularly strong activity on Friday and Saturday.
+            Midnight and very early morning look relatively quiet by comparison.
           </p>
           <p>
-            This interactive figure is intentionally author-guided in placement but reader-driven in detail. The overall claim is fixed:
-            time matters. But the reader can still inspect which categories dominate specific hours and how the pattern differs across the week.
+            This matters because it makes larceny theft look less like background noise and more like an activity linked to daily urban routines:
+            shopping hours, commute hours, nightlife spillover, and places where many potential targets pass through. The exact causes still need outside evidence,
+            but the timing pattern itself is too structured to call random.
           </p>
         </div>
         <figure>
@@ -373,23 +373,22 @@
           </div>
           <figcaption>
             <span class="caption-label">Figure 2</span>
-            A two-panel Plotly figure. The upper heatmap shows incident intensity by weekday and hour; the lower panel compares the hourly
-            profile of the six most common categories. Together they show that the citywide total is built from repeated, structured timing patterns.
+            A two-panel Plotly figure for <em>Larceny Theft</em>. The upper heatmap shows how counts vary by weekday and hour, while the lower panel traces each weekday's hourly curve.
+            Both views point to the same conclusion: theft is concentrated in the active part of the day, especially toward the afternoon and early evening.
           </figcaption>
         </figure>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>3. The same concentration appears in space</h2>
+          <h2>3. The map shows that the pattern is spatial as well as temporal</h2>
           <p>
-            The temporal structure is matched by a spatial one. When incidents are aggregated into hotspot cells, the map pulls attention
-            toward a relatively small set of central and high-activity areas instead of spreading intensity evenly across San Francisco.
-            That does not mean those neighborhoods are defined by crime, nor does it mean residents there are uniquely responsible for the pattern.
+            The time pattern is matched by a space pattern. When larceny theft is aggregated into hotspot cells, the heatmap does not light up the whole city evenly.
+            Instead, it concentrates into a relatively small number of cells, especially in the Central, Northern, and Southern districts and a few other high-activity areas.
           </p>
           <p>
-            A hotspot map mainly tells us where incidents are repeatedly recorded. In a city with dense commercial corridors, tourism, transit,
-            and heavy policing, that makes these locations especially important for interpretation and especially risky to oversimplify.
+            I read this map as a warning against neighborhood averages. A district can have a lot of recorded theft without that meaning every block is equally exposed.
+            The assignment 1 power-law result already pointed in this direction, and the hotspot map makes the same point visually: a small number of places absorb a large share of incidents.
           </p>
         </div>
         <figure>
@@ -399,8 +398,8 @@
           </div>
           <figcaption>
             <span class="caption-label">Figure 3</span>
-            Heatmap of aggregated incident hotspots. The highest-intensity cells cluster in a limited part of the city, reinforcing the
-            main claim of this story: recorded incidents are concentrated in space as well as in time.
+            Heatmap of <em>Larceny Theft</em> hotspot cells. The strongest intensity is confined to a limited part of the city rather than spread across San Francisco,
+            reinforcing the central claim of the story: this crime is concentrated in both time and space.
           </figcaption>
         </figure>
       </section>
@@ -408,13 +407,12 @@
       <section class="ending">
         <h2>What the reader should take away</h2>
         <p>
-          The main lesson is not that every part of San Francisco became uniformly safer or uniformly riskier over time. The stronger claim
-          is narrower and more defensible: in this dataset, incidents are concentrated. They cluster into specific periods and specific places,
-          which means that any serious interpretation has to be localized instead of relying on citywide averages alone.
+          The main point is narrow on purpose. I am not claiming that larceny theft tells the whole story of crime in San Francisco, and I am not claiming that recorded counts map directly onto underlying theft behavior.
+          What I am claiming is simpler and more defensible: in this dataset, larceny theft is highly concentrated. It clusters into a specific recent period, a specific part of the day, and a specific set of hotspot areas.
         </p>
         <p>
-          That is also why caution matters. Incident data is shaped by enforcement and reporting systems, not just by underlying behavior.
-          The visualizations above are useful because they reveal structure, but they should not be mistaken for a complete causal story.
+          That is why the category is interesting, but also why it needs caution. If someone wanted to turn this page into a policy argument, the next step would have to be outside evidence about retail activity, mobility, reporting, enforcement, and local context.
+          The figures here reveal structure. They do not, by themselves, prove the cause of that structure.
         </p>
       </section>
 
@@ -450,28 +448,25 @@
 
     async function drawPlotlyStory() {
       try {
-        const [heat, cat] = await Promise.all([
-          loadJson("data/weekday_hour_heatmap.json"),
-          loadJson("data/hourly_top_categories.json")
-        ]);
+        const temporal = await loadJson("data/larceny_temporal_story.json");
 
         const traces = [{
           type: "heatmap",
-          z: heat.z,
-          x: heat.hours,
-          y: heat.weekdays,
+          z: temporal.z,
+          x: temporal.hours,
+          y: temporal.weekdays,
           colorscale: "YlOrRd",
           hovertemplate: "%{y}<br>%{x}<br>Incidents: %{z}<extra></extra>",
           xaxis: "x",
           yaxis: "y"
         }];
 
-        cat.series.forEach((series) => {
+        temporal.series.forEach((series) => {
           traces.push({
             type: "scatter",
             mode: "lines",
-            name: series.name + " (" + series.total.toLocaleString() + ")",
-            x: cat.hours,
+            name: series.name,
+            x: temporal.hours,
             y: series.values,
             hovertemplate: "%{fullData.name}<br>%{x}: %{y}<extra></extra>",
             xaxis: "x2",
@@ -521,7 +516,7 @@
             zeroline: false
           },
           annotations: [{
-            text: "When incidents happen",
+            text: "When larceny theft happens",
             x: 0,
             xref: "paper",
             y: 1.09,
@@ -529,7 +524,7 @@
             showarrow: false,
             font: { size: 14, color: "#edf2f9" }
           }, {
-            text: "Which categories build those peaks",
+            text: "How the weekday curves differ",
             x: 0,
             xref: "paper",
             y: 0.42,
@@ -561,7 +556,7 @@
       }).addTo(map);
 
       try {
-        const hot = await loadJson("data/crime_hotspots.json");
+        const hot = await loadJson("data/larceny_hotspots.json");
         const max = hot.max || 1;
         const heatPoints = hot.points.map((point) => [point.lat, point.lon, Math.max(0.08, point.count / max)]);
 
