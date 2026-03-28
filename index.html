@@ -3,374 +3,434 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TROY571 | SF Crime Data Visualizations</title>
-  <meta name="description" content="Portfolio of San Francisco crime data visualizations built for course 02806.">
+  <title>TROY571 | A Short SF Crime Data Story</title>
+  <meta name="description" content="A short magazine-style data story about temporal and spatial concentration in San Francisco crime incidents.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Serif:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
-      --bg: #0b1220;
-      --panel: #16243f;
-      --text: #e8eef8;
-      --muted: #9fb2cc;
-      --accent: #2ec4b6;
-      --border: #2a3a5e;
-      --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
-      --radius: 18px;
-      --max: 1120px;
+      --bg: #f4efe4;
+      --paper: rgba(255, 251, 243, 0.9);
+      --ink: #1f1d1a;
+      --muted: #60574e;
+      --line: #d9cfbe;
+      --accent: #9f3e2d;
+      --accent-soft: #e6b28c;
+      --deep: #20344f;
+      --shadow: 0 20px 50px rgba(63, 44, 24, 0.12);
+      --max: 980px;
+      --radius: 20px;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      color: var(--text);
       background:
-        radial-gradient(1200px 800px at 85% -10%, rgba(46, 196, 182, 0.18), transparent 55%),
-        radial-gradient(900px 700px at -10% 0%, rgba(255, 122, 89, 0.15), transparent 50%),
+        radial-gradient(900px 420px at 100% 0%, rgba(159, 62, 45, 0.08), transparent 60%),
+        radial-gradient(700px 360px at 0% 20%, rgba(32, 52, 79, 0.09), transparent 55%),
         var(--bg);
-      font-family: "Sora", "Segoe UI", sans-serif;
-      line-height: 1.65;
+      color: var(--ink);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.75;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(10px);
-      background: rgba(11, 18, 32, 0.72);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .topbar-inner, .container {
+    .shell {
       width: min(var(--max), 92vw);
       margin: 0 auto;
     }
 
-    .topbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-    }
-
-    .brand {
-      font-size: 0.92rem;
+    .masthead {
+      padding: 24px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      color: var(--text);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      transition: 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
     }
 
     header {
-      padding: 68px 0 34px;
+      padding: 22px 0 38px;
     }
 
     .hero {
-      background: linear-gradient(145deg, rgba(22, 36, 63, 0.96), rgba(18, 29, 51, 0.94));
-      border: 1px solid var(--border);
-      border-radius: calc(var(--radius) + 8px);
-      padding: clamp(24px, 4vw, 42px);
+      padding: 42px clamp(20px, 4vw, 48px) 36px;
+      background: linear-gradient(145deg, rgba(255, 251, 243, 0.84), rgba(255, 247, 235, 0.68));
+      border: 1px solid rgba(217, 207, 190, 0.92);
+      border-radius: 28px;
       box-shadow: var(--shadow);
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
+      animation: reveal 0.7s ease-out both;
     }
 
-    .hero::after {
+    .hero::before {
       content: "";
       position: absolute;
-      width: 320px;
-      height: 320px;
-      right: -60px;
-      top: -100px;
-      background: radial-gradient(circle, rgba(46, 196, 182, 0.24), transparent 70%);
+      inset: auto -60px -80px auto;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(159, 62, 45, 0.14), transparent 70%);
       pointer-events: none;
     }
 
-    .label {
+    .eyebrow {
       display: inline-block;
-      font-size: 0.78rem;
+      margin-bottom: 16px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 5px 12px;
-      color: var(--muted);
-      margin-bottom: 16px;
     }
 
-    h1, h2 {
-      margin: 0 0 12px;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-    }
-
-    h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
-    h2 { font-size: clamp(1.3rem, 2.2vw, 1.8rem); margin-bottom: 16px; }
-
-    .intro {
-      max-width: 760px;
-      color: #d5e0f1;
-      margin: 0 0 18px;
-      font-family: "IBM Plex Serif", serif;
-      font-size: clamp(1.02rem, 1.5vw, 1.15rem);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn {
-      text-decoration: none;
-      color: #03131f;
-      background: var(--accent);
-      border-radius: 12px;
-      padding: 10px 16px;
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.08;
       font-weight: 700;
-      border: 1px solid transparent;
-      transition: 0.2s ease;
     }
 
-    .btn.secondary {
-      background: transparent;
-      color: var(--text);
-      border-color: var(--border);
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.7rem);
+      max-width: 12ch;
+      letter-spacing: -0.04em;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(46, 196, 182, 0.24);
+    .standfirst {
+      max-width: 66ch;
+      margin: 18px 0 0;
+      font-size: 1.08rem;
+      color: #3f3a35;
     }
 
-    main { padding-bottom: 60px; }
-    section { margin-top: 42px; }
+    main {
+      padding-bottom: 72px;
+    }
 
-    .section-card {
-      background: rgba(16, 26, 45, 0.9);
-      border: 1px solid var(--border);
+    .lede,
+    .story-block,
+    .ending,
+    .sources {
+      animation: reveal 0.7s ease-out both;
+      animation-delay: 0.1s;
+    }
+
+    .lede {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin: 0 0 26px;
+    }
+
+    .lede-card,
+    .note-card {
+      background: rgba(255, 251, 243, 0.82);
+      border: 1px solid rgba(217, 207, 190, 0.9);
       border-radius: var(--radius);
-      padding: clamp(18px, 2.6vw, 28px);
+      box-shadow: var(--shadow);
+      padding: 22px;
     }
 
-    .muted { color: var(--muted); margin-top: 0; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
+    .note-card {
+      background: linear-gradient(180deg, rgba(32, 52, 79, 0.96), rgba(28, 43, 63, 0.96));
+      color: #edf2f9;
+      border-color: rgba(32, 52, 79, 0.35);
     }
 
-    .viz-card {
-      grid-column: span 6;
-      background: linear-gradient(165deg, rgba(23, 35, 58, 0.95), rgba(19, 30, 49, 0.95));
-      border: 1px solid var(--border);
-      border-radius: 14px;
+    .note-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .story-block {
+      margin: 28px 0 42px;
+    }
+
+    .story-text {
+      width: min(68ch, 100%);
+      margin: 0 auto 18px;
+      font-size: 1.02rem;
+    }
+
+    .story-text p {
+      margin: 0 0 14px;
+    }
+
+    figure {
+      margin: 0;
+      background: var(--paper);
+      border: 1px solid rgba(217, 207, 190, 0.92);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
       overflow: hidden;
-      transition: transform 0.22s ease, border-color 0.22s ease;
     }
 
-    .viz-card:hover {
-      transform: translateY(-3px);
-      border-color: #3d5d8d;
-    }
-
-    .viz-card img {
+    figure img {
       width: 100%;
-      height: 220px;
-      object-fit: cover;
       display: block;
-      background: #0d1729;
+      background: #101b31;
     }
 
-    .viz-body { padding: 14px 14px 16px; }
-    .viz-body h3 { margin: 0 0 7px; font-size: 1.02rem; }
-    .viz-body p { margin: 0; color: var(--muted); font-size: 0.93rem; }
-
-    .interactive-layout {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
+    .media-wrap {
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255, 251, 243, 0.62), rgba(248, 241, 229, 0.82));
     }
 
-    .interactive-card {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: linear-gradient(165deg, rgba(23, 35, 58, 0.95), rgba(19, 30, 49, 0.95));
+    #plotly-story {
+      width: 100%;
+      height: 720px;
+      border-radius: 16px;
       overflow: hidden;
-      grid-column: span 6;
+      background: #13253b;
     }
 
-    .interactive-card.full { grid-column: span 12; }
-
-    .interactive-top {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .interactive-body { padding: 10px; }
-
-    .plot-canvas {
+    #story-map {
       width: 100%;
-      height: 360px;
-      background: #0e1a31;
-      border-radius: 10px;
+      height: 560px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #13253b;
     }
 
-    #hotspot-map {
-      width: 100%;
-      height: 460px;
-      background: #0e1a31;
-      border-radius: 10px;
+    figcaption {
+      padding: 18px 20px 22px;
+      border-top: 1px solid rgba(217, 207, 190, 0.92);
+      color: #443e38;
+      font-size: 0.96rem;
+    }
+
+    .caption-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    .ending,
+    .sources {
+      background: rgba(255, 251, 243, 0.82);
+      border: 1px solid rgba(217, 207, 190, 0.92);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin: 30px 0 0;
+    }
+
+    .sources ul {
+      margin: 10px 0 0;
+      padding-left: 1.2rem;
+    }
+
+    .sources a {
+      color: var(--accent);
+      text-decoration: none;
     }
 
     .status {
-      margin-top: 8px;
-      color: #ffd2a7;
-      font-size: 0.84rem;
+      margin-top: 10px;
+      color: #b85740;
+      font-size: 0.88rem;
       min-height: 1.2em;
     }
 
     footer {
-      width: min(var(--max), 92vw);
-      margin: 24px auto 40px;
+      padding: 22px 0 46px;
       color: var(--muted);
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 980px) {
-      .viz-card { grid-column: span 12; }
-      .interactive-card, .interactive-card.full { grid-column: span 12; }
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    @media (max-width: 620px) {
-      .topbar-inner { gap: 8px; align-items: flex-start; flex-direction: column; }
-      header { padding-top: 42px; }
-      .hero-actions { flex-direction: column; align-items: flex-start; }
+    @media (max-width: 860px) {
+      .lede {
+        grid-template-columns: 1fr;
+      }
+
+      #plotly-story {
+        height: 860px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      header {
+        padding-top: 16px;
+      }
+
+      .hero {
+        padding: 28px 18px 26px;
+      }
+
+      .story-text {
+        font-size: 0.98rem;
+      }
+
+      #plotly-story {
+        height: 940px;
+      }
+
+      #story-map {
+        height: 440px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">TROY571.github.io</div>
-      <nav class="nav-links" aria-label="Sections">
-        <a href="#static-viz">Static Visuals</a>
-        <a href="#interactive-viz">Interactive</a>
-      </nav>
-    </div>
-  </div>
-
-  <header>
-    <div class="container">
-      <div class="hero">
-        <span class="label">Data Story Platform</span>
-        <h1>San Francisco Crime Visualizations</h1>
-        <p class="intro">
-          This site publishes course visualizations from the SF crime dataset, combining static plots with interactive exploration of temporal and spatial patterns.
+  <div class="shell">
+    <div class="masthead">02806 Social Data Analysis and Visualization</div>
+    <header>
+      <section class="hero">
+        <span class="eyebrow">Short Data Story</span>
+        <h1>Crime in San Francisco is concentrated, not random</h1>
+        <p class="standfirst">
+          The combined SFPD incident dataset contains more than three million recorded incidents from 2003 onward. Read as a whole,
+          it does not show crime spreading evenly across the city or across the day. It shows concentration: in a few years, in a
+          few hours, and in a few places. This story follows that pattern from annual totals to daily rhythm to geographic hotspot.
         </p>
-        <div class="hero-actions">
-          <a class="btn" href="#static-viz">Browse Charts</a>
-          <a class="btn secondary" href="#interactive-viz">Open Interactive Section</a>
+      </section>
+    </header>
+
+    <main>
+      <section class="lede">
+        <div class="lede-card">
+          <h2>Dataset and framing</h2>
+          <p>
+            The data comes from San Francisco Police Department incident reports that were cleaned and combined during the course.
+            Each row is a recorded incident, not a direct measure of harm, victimization, or resident behavior. That distinction matters:
+            changes in policing, reporting practices, and record systems can move the counts even when underlying behavior changes less.
+          </p>
+          <p>
+            With that caveat in place, the dataset is still useful for asking where incidents accumulate and when they tend to happen.
+            Those are the questions this page focuses on.
+          </p>
         </div>
-      </div>
-    </div>
-  </header>
+        <aside class="note-card">
+          <h3>Story claim</h3>
+          <p>
+            The strongest signal in this dataset is concentration. Recorded incidents cluster into specific years, specific hours, and
+            specific central-city locations. That makes a general citywide average less informative than a targeted view of time and place.
+          </p>
+        </aside>
+      </section>
 
-  <main class="container">
-    <section id="static-viz" class="section-card">
-      <h2>Static Visualizations</h2>
-      <p class="muted">Exported PNG figures from Week 1 and Week 3 notebooks.</p>
-      <div class="grid">
-        <article class="viz-card">
-          <img src="assets/images/yearly_counts.png" alt="Yearly crime trend plot">
-          <div class="viz-body"><h3>Yearly Crime Counts</h3><p>High-level trend overview across years.</p></div>
-        </article>
-        <article class="viz-card">
-          <img src="assets/images/district_trends.png" alt="District-level trend plot">
-          <div class="viz-body"><h3>District Trends</h3><p>Comparative crime patterns by district.</p></div>
-        </article>
-        <article class="viz-card">
-          <img src="assets/images/crime_types.png" alt="Crime type comparison plot">
-          <div class="viz-body"><h3>Crime Type Comparison</h3><p>Distribution contrast across offense categories.</p></div>
-        </article>
-        <article class="viz-card">
-          <img src="assets/images/daily_boxplot.png" alt="Daily boxplot of crime counts">
-          <div class="viz-body"><h3>Daily Boxplot</h3><p>Variability and spread in daily counts.</p></div>
-        </article>
-        <article class="viz-card">
-          <img src="assets/images/time_boxplot.png" alt="Time-based boxplot">
-          <div class="viz-body"><h3>Time-of-Day Boxplot</h3><p>Temporal concentration and dispersion by hour.</p></div>
-        </article>
-        <article class="viz-card">
-          <img src="assets/images/probability_plots.png" alt="Probability analysis plots">
-          <div class="viz-body"><h3>Probability Analysis</h3><p>Probabilistic view of crime occurrence behavior.</p></div>
-        </article>
-      </div>
-    </section>
+      <section class="story-block">
+        <div class="story-text">
+          <h2>1. Annual totals move, but not in a straight line</h2>
+          <p>
+            A first look at the full series shows why a single headline like "crime went up" or "crime went down" is too simple. The
+            counts are relatively high in the mid-2000s, surge again in the late 2010s, and then drop sharply after 2018. The decline
+            after 2020 is real in the recorded data, but it should still be read carefully because recorded incidents can change for
+            administrative reasons as well as social ones.
+          </p>
+          <p>
+            Even with that caution, the chart establishes an important baseline: the dataset has distinct phases rather than one stable
+            average. That is the first sign that crime in this dataset is concentrated rather than evenly distributed over time.
+          </p>
+        </div>
+        <figure>
+          <img src="assets/images/story_yearly_trend.svg" alt="Bar chart of San Francisco incidents by year from 2003 to 2024">
+          <figcaption>
+            <span class="caption-label">Figure 1</span>
+            Annual incident counts for 2003-2024. The 2018 spike and the post-2020 drop stand out immediately, which is why later charts
+            should be read as patterns inside a changing overall baseline rather than as isolated snapshots.
+          </figcaption>
+        </figure>
+      </section>
 
-    <section id="interactive-viz" class="section-card">
-      <h2>Interactive Visualizations</h2>
-      <p class="muted">Rendered directly on this page from local JSON data files.</p>
-      <div class="interactive-layout">
-        <article class="interactive-card">
-          <div class="interactive-top">Hour x Weekday Intensity</div>
-          <div class="interactive-body">
-            <div id="weekday-heatmap" class="plot-canvas"></div>
-            <div id="status-heatmap" class="status"></div>
+      <section class="story-block">
+        <div class="story-text">
+          <h2>2. The yearly total hides a strong daily rhythm</h2>
+          <p>
+            Once the data is broken into weekday and hour, a much sharper structure appears. Incidents do not arrive uniformly across the
+            24-hour cycle. Instead, they build into clear peaks, and different categories contribute to those peaks in different ways.
+            Theft-related categories have a strong evening profile, while the overall heatmap shows that some weekday-hour combinations
+            consistently absorb more incidents than others.
+          </p>
+          <p>
+            This interactive figure is intentionally author-guided in placement but reader-driven in detail. The overall claim is fixed:
+            time matters. But the reader can still inspect which categories dominate specific hours and how the pattern differs across the week.
+          </p>
+        </div>
+        <figure>
+          <div class="media-wrap">
+            <div id="plotly-story"></div>
+            <div id="status-plotly" class="status"></div>
           </div>
-        </article>
+          <figcaption>
+            <span class="caption-label">Figure 2</span>
+            A two-panel Plotly figure. The upper heatmap shows incident intensity by weekday and hour; the lower panel compares the hourly
+            profile of the six most common categories. Together they show that the citywide total is built from repeated, structured timing patterns.
+          </figcaption>
+        </figure>
+      </section>
 
-        <article class="interactive-card">
-          <div class="interactive-top">Top Crime Categories by Hour</div>
-          <div class="interactive-body">
-            <div id="category-lines" class="plot-canvas"></div>
-            <div id="status-lines" class="status"></div>
-          </div>
-        </article>
-
-        <article class="interactive-card full">
-          <div class="interactive-top">Spatial Hotspots Map</div>
-          <div class="interactive-body">
-            <div id="hotspot-map"></div>
+      <section class="story-block">
+        <div class="story-text">
+          <h2>3. The same concentration appears in space</h2>
+          <p>
+            The temporal structure is matched by a spatial one. When incidents are aggregated into hotspot cells, the map pulls attention
+            toward a relatively small set of central and high-activity areas instead of spreading intensity evenly across San Francisco.
+            That does not mean those neighborhoods are defined by crime, nor does it mean residents there are uniquely responsible for the pattern.
+          </p>
+          <p>
+            A hotspot map mainly tells us where incidents are repeatedly recorded. In a city with dense commercial corridors, tourism, transit,
+            and heavy policing, that makes these locations especially important for interpretation and especially risky to oversimplify.
+          </p>
+        </div>
+        <figure>
+          <div class="media-wrap">
+            <div id="story-map"></div>
             <div id="status-map" class="status"></div>
           </div>
-        </article>
-      </div>
-    </section>
-  </main>
+          <figcaption>
+            <span class="caption-label">Figure 3</span>
+            Heatmap of aggregated incident hotspots. The highest-intensity cells cluster in a limited part of the city, reinforcing the
+            main claim of this story: recorded incidents are concentrated in space as well as in time.
+          </figcaption>
+        </figure>
+      </section>
 
-  <footer>
-    Built for course 02806 by TROY571.
-  </footer>
+      <section class="ending">
+        <h2>What the reader should take away</h2>
+        <p>
+          The main lesson is not that every part of San Francisco became uniformly safer or uniformly riskier over time. The stronger claim
+          is narrower and more defensible: in this dataset, incidents are concentrated. They cluster into specific periods and specific places,
+          which means that any serious interpretation has to be localized instead of relying on citywide averages alone.
+        </p>
+        <p>
+          That is also why caution matters. Incident data is shaped by enforcement and reporting systems, not just by underlying behavior.
+          The visualizations above are useful because they reveal structure, but they should not be mistaken for a complete causal story.
+        </p>
+      </section>
+
+      <section class="sources">
+        <h2>Sources</h2>
+        <ul>
+          <li>San Francisco Police Department incident reports, combined 2003-present course dataset.</li>
+          <li>Basemap tiles from OpenStreetMap contributors.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      Built for Assignment 2 on GitHub Pages.
+    </footer>
+  </div>
 
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -381,61 +441,120 @@
     }
 
     async function loadJson(path) {
-      const res = await fetch(path, { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to load " + path + " (" + res.status + ")");
-      return res.json();
+      const response = await fetch(path, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Failed to load " + path + " (" + response.status + ")");
+      }
+      return response.json();
     }
 
-    async function drawPlotly() {
+    async function drawPlotlyStory() {
       try {
         const [heat, cat] = await Promise.all([
           loadJson("data/weekday_hour_heatmap.json"),
           loadJson("data/hourly_top_categories.json")
         ]);
 
-        Plotly.newPlot("weekday-heatmap", [{
+        const traces = [{
           type: "heatmap",
           z: heat.z,
           x: heat.hours,
           y: heat.weekdays,
           colorscale: "YlOrRd",
-          hovertemplate: "%{y}<br>%{x}<br>Incidents: %{z}<extra></extra>"
-        }], {
-          margin: { l: 80, r: 14, t: 8, b: 46 },
-          paper_bgcolor: "rgba(0,0,0,0)",
-          plot_bgcolor: "rgba(0,0,0,0)",
-          font: { color: "#e8eef8" },
-          xaxis: { title: "Hour", tickangle: -35, gridcolor: "#203153" },
-          yaxis: { title: "Weekday", gridcolor: "#203153" }
-        }, { responsive: true, displaylogo: false });
+          hovertemplate: "%{y}<br>%{x}<br>Incidents: %{z}<extra></extra>",
+          xaxis: "x",
+          yaxis: "y"
+        }];
 
-        const lineTraces = cat.series.map((s) => ({
-          type: "scatter",
-          mode: "lines",
-          name: s.name + " (" + s.total.toLocaleString() + ")",
-          x: cat.hours,
-          y: s.values,
-          hovertemplate: "%{fullData.name}<br>%{x}: %{y}<extra></extra>"
-        }));
+        cat.series.forEach((series) => {
+          traces.push({
+            type: "scatter",
+            mode: "lines",
+            name: series.name + " (" + series.total.toLocaleString() + ")",
+            x: cat.hours,
+            y: series.values,
+            hovertemplate: "%{fullData.name}<br>%{x}: %{y}<extra></extra>",
+            xaxis: "x2",
+            yaxis: "y2",
+            line: { width: 2.4 }
+          });
+        });
 
-        Plotly.newPlot("category-lines", lineTraces, {
-          margin: { l: 58, r: 18, t: 8, b: 46 },
-          paper_bgcolor: "rgba(0,0,0,0)",
-          plot_bgcolor: "rgba(0,0,0,0)",
-          font: { color: "#e8eef8" },
-          xaxis: { title: "Hour", tickangle: -35, gridcolor: "#203153" },
-          yaxis: { title: "Incidents", gridcolor: "#203153" },
-          legend: { orientation: "h", y: 1.14 }
-        }, { responsive: true, displaylogo: false });
-      } catch (err) {
-        console.error(err);
-        setStatus("status-heatmap", "Heatmap data failed to load.");
-        setStatus("status-lines", "Line chart data failed to load.");
+        Plotly.newPlot("plotly-story", traces, {
+          paper_bgcolor: "#13253b",
+          plot_bgcolor: "#13253b",
+          font: { color: "#edf2f9", family: "Manrope, sans-serif" },
+          margin: { l: 64, r: 28, t: 26, b: 54 },
+          legend: {
+            orientation: "h",
+            yanchor: "bottom",
+            y: -0.18,
+            x: 0
+          },
+          grid: {
+            rows: 2,
+            columns: 1,
+            pattern: "independent",
+            roworder: "top to bottom"
+          },
+          xaxis: {
+            title: "Hour of day",
+            tickangle: -35,
+            gridcolor: "#2a4364",
+            zeroline: false
+          },
+          yaxis: {
+            title: "Weekday",
+            gridcolor: "#2a4364",
+            zeroline: false,
+            automargin: true
+          },
+          xaxis2: {
+            title: "Hour of day",
+            tickangle: -35,
+            gridcolor: "#2a4364",
+            zeroline: false
+          },
+          yaxis2: {
+            title: "Incident count",
+            gridcolor: "#2a4364",
+            zeroline: false
+          },
+          annotations: [{
+            text: "When incidents happen",
+            x: 0,
+            xref: "paper",
+            y: 1.09,
+            yref: "paper",
+            showarrow: false,
+            font: { size: 14, color: "#edf2f9" }
+          }, {
+            text: "Which categories build those peaks",
+            x: 0,
+            xref: "paper",
+            y: 0.42,
+            yref: "paper",
+            showarrow: false,
+            font: { size: 14, color: "#edf2f9" }
+          }]
+        }, {
+          responsive: true,
+          displaylogo: false
+        });
+      } catch (error) {
+        console.error(error);
+        setStatus("status-plotly", "Interactive chart data failed to load.");
       }
     }
 
-    async function drawMap() {
-      const map = L.map("hotspot-map", { zoomControl: true, minZoom: 10, maxZoom: 17 }).setView([37.7749, -122.4194], 12);
+    async function drawStoryMap() {
+      const map = L.map("story-map", {
+        zoomControl: true,
+        minZoom: 10,
+        maxZoom: 17,
+        scrollWheelZoom: false
+      }).setView([37.7749, -122.4194], 12);
+
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: "&copy; OpenStreetMap contributors"
@@ -444,24 +563,29 @@
       try {
         const hot = await loadJson("data/crime_hotspots.json");
         const max = hot.max || 1;
-        const heatPoints = hot.points.map((p) => [p.lat, p.lon, Math.max(0.08, p.count / max)]);
+        const heatPoints = hot.points.map((point) => [point.lat, point.lon, Math.max(0.08, point.count / max)]);
 
         L.heatLayer(heatPoints, {
           radius: 17,
           blur: 14,
           maxZoom: 16,
-          gradient: { 0.2: "#3ddad7", 0.45: "#ffd166", 0.7: "#f77f00", 1.0: "#d62828" }
+          gradient: {
+            0.2: "#f7d08a",
+            0.45: "#e59b5a",
+            0.7: "#bd5f35",
+            1.0: "#7d1f21"
+          }
         }).addTo(map);
 
         setStatus("status-map", "Hotspot cells loaded: " + hot.points.length.toLocaleString());
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
         setStatus("status-map", "Map data failed to load.");
       }
     }
 
-    drawPlotly();
-    drawMap();
+    drawPlotlyStory();
+    drawStoryMap();
   </script>
 </body>
 </html>

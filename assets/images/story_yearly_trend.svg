@@ -1,0 +1,61 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='520' viewBox='0 0 1200 520' role='img' aria-labelledby='title desc'>
+  <title id='title'>San Francisco crime incidents by year</title>
+  <desc id='desc'>Annual incident counts from 2003 to 2024, with 2018 highlighted as a spike and 2020 highlighted as a drop.</desc>
+  <rect width='100%' height='100%' fill='#101b31'/>
+  <text x='82' y='38' fill='#e8eef8' font-size='28' font-family='Segoe UI, Arial, sans-serif' font-weight='700'>Incidents trend up and down, but the baseline falls after the late 2010s</text>
+  <text x='82' y='62' fill='#9fb2cc' font-size='15' font-family='Segoe UI, Arial, sans-serif'>San Francisco incident counts per year, 2003-2024. Partial years 2025-2026 are excluded.</text>
+  <line x1='82' y1='436' x2='1158' y2='436' stroke='#24375b' stroke-width='1'/>
+  <text x='18' y='441' fill='#8fa6c4' font-size='13' font-family='Segoe UI, Arial, sans-serif'>0</text>
+  <line x1='82' y1='345' x2='1158' y2='345' stroke='#24375b' stroke-width='1'/>
+  <text x='18' y='350' fill='#8fa6c4' font-size='13' font-family='Segoe UI, Arial, sans-serif'>0</text>
+  <line x1='82' y1='254' x2='1158' y2='254' stroke='#24375b' stroke-width='1'/>
+  <text x='18' y='259' fill='#8fa6c4' font-size='13' font-family='Segoe UI, Arial, sans-serif'>1</text>
+  <line x1='82' y1='163' x2='1158' y2='163' stroke='#24375b' stroke-width='1'/>
+  <text x='18' y='168' fill='#8fa6c4' font-size='13' font-family='Segoe UI, Arial, sans-serif'>2</text>
+  <line x1='82' y1='72' x2='1158' y2='72' stroke='#24375b' stroke-width='1'/>
+  <text x='18' y='77' fill='#8fa6c4' font-size='13' font-family='Segoe UI, Arial, sans-serif'>2</text>
+  <rect x='82' y='-25531616' width='41' height='25532052' rx='3' fill='#4d648d'/>
+  <text x='102' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2003</text>
+  <rect x='131' y='-25360718' width='41' height='25361154' rx='3' fill='#4d648d'/>
+  <rect x='180' y='-24389566' width='41' height='24390002' rx='3' fill='#4d648d'/>
+  <text x='200' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2005</text>
+  <rect x='229' y='-23403308' width='41' height='23403744' rx='3' fill='#4d648d'/>
+  <rect x='278' y='-23421872' width='41' height='23422308' rx='3' fill='#4d648d'/>
+  <text x='298' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2007</text>
+  <rect x='327' y='-23994444' width='41' height='23994880' rx='3' fill='#4d648d'/>
+  <rect x='376' y='-23808804' width='41' height='23809240' rx='3' fill='#4d648d'/>
+  <text x='396' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2009</text>
+  <rect x='425' y='-22535350' width='41' height='22535786' rx='3' fill='#4d648d'/>
+  <rect x='474' y='-22360812' width='41' height='22361248' rx='3' fill='#4d648d'/>
+  <text x='494' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2011</text>
+  <rect x='523' y='-23937114' width='41' height='23937550' rx='3' fill='#4d648d'/>
+  <rect x='572' y='-26061236' width='41' height='26061672' rx='3' fill='#4d648d'/>
+  <text x='592' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2013</text>
+  <rect x='621' y='-25472284' width='41' height='25472720' rx='3' fill='#4d648d'/>
+  <rect x='670' y='-26694414' width='41' height='26694850' rx='3' fill='#4d648d'/>
+  <text x='690' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2015</text>
+  <rect x='719' y='-25724354' width='41' height='25724790' rx='3' fill='#4d648d'/>
+  <rect x='768' y='-26394114' width='41' height='26394550' rx='3' fill='#4d648d'/>
+  <text x='788' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2017</text>
+  <rect x='817' y='-33363440' width='41' height='33363876' rx='3' fill='#ff8a5b'/>
+  <text x='837' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2018</text>
+  <text x='837' y='-33363450' text-anchor='middle' fill='#e8eef8' font-size='12' font-family='Segoe UI, Arial, sans-serif'>183,318</text>
+  <rect x='866' y='-24515146' width='41' height='24515582' rx='3' fill='#4d648d'/>
+  <text x='886' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2019</text>
+  <rect x='915' y='-19884520' width='41' height='19884956' rx='3' fill='#2ec4b6'/>
+  <text x='935' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2020</text>
+  <text x='935' y='-19884530' text-anchor='middle' fill='#e8eef8' font-size='12' font-family='Segoe UI, Arial, sans-serif'>109,258</text>
+  <rect x='964' y='-21605694' width='41' height='21606130' rx='3' fill='#4d648d'/>
+  <text x='984' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2021</text>
+  <rect x='1013' y='-22706612' width='41' height='22707048' rx='3' fill='#4d648d'/>
+  <rect x='1062' y='-22346616' width='41' height='22347052' rx='3' fill='#4d648d'/>
+  <text x='1082' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2023</text>
+  <rect x='1111' y='-18729730' width='41' height='18730166' rx='3' fill='#4d648d'/>
+  <text x='1131' y='478' text-anchor='middle' fill='#8fa6c4' font-size='12' font-family='Segoe UI, Arial, sans-serif'>2024</text>
+  <line x1='82' y1='72' x2='82' y2='436' stroke='#486384' stroke-width='1.2'/>
+  <line x1='82' y1='436' x2='1158' y2='436' stroke='#486384' stroke-width='1.2'/>
+  <rect x='820' y='82' width='18' height='18' rx='3' fill='#ff8a5b'/>
+  <text x='846' y='96' fill='#c9d7ea' font-size='13' font-family='Segoe UI, Arial, sans-serif'>2018 spike</text>
+  <rect x='950' y='82' width='18' height='18' rx='3' fill='#2ec4b6'/>
+  <text x='976' y='96' fill='#c9d7ea' font-size='13' font-family='Segoe UI, Arial, sans-serif'>2020 drop</text>
+</svg>
