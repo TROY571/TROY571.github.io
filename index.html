@@ -3,38 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TROY571 | A Short Data Story on Larceny Theft</title>
-  <meta name="description" content="A short magazine-style data story about how larceny theft clusters in time and space in San Francisco.">
+  <title>TROY571 | Drug Offense Is Not Evenly Distributed</title>
+  <meta name="description" content="A short data story about how Drug Offense records in San Francisco concentrate in Tenderloin, dip during COVID, and follow an enforcement-shaped daily rhythm.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
-      --bg: #f4efe4;
-      --paper: rgba(255, 251, 243, 0.9);
-      --ink: #1f1d1a;
-      --muted: #60574e;
-      --line: #d9cfbe;
-      --accent: #9f3e2d;
-      --accent-soft: #e6b28c;
-      --deep: #20344f;
-      --shadow: 0 20px 50px rgba(63, 44, 24, 0.12);
+      --cream: #F8E9A1;
+      --coral: #F76C6C;
+      --sky: #A8D0E6;
+      --indigo: #374785;
+      --navy: #24305E;
+      --paper: rgba(255, 252, 244, 0.88);
+      --ink: #24305E;
+      --muted: #45548d;
+      --line: rgba(36, 48, 94, 0.16);
+      --shadow: 0 18px 44px rgba(36, 48, 94, 0.16);
+      --radius: 22px;
       --max: 980px;
-      --radius: 20px;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background:
-        radial-gradient(900px 420px at 100% 0%, rgba(159, 62, 45, 0.08), transparent 60%),
-        radial-gradient(700px 360px at 0% 20%, rgba(32, 52, 79, 0.09), transparent 55%),
-        var(--bg);
       color: var(--ink);
       font-family: "Manrope", "Segoe UI", sans-serif;
       line-height: 1.75;
+      background:
+        radial-gradient(900px 420px at 0% 0%, rgba(248, 233, 161, 0.8), transparent 55%),
+        linear-gradient(180deg, var(--sky) 0 33%, #eef4fa 33% 100%);
     }
 
     .shell {
@@ -44,34 +44,36 @@
 
     .masthead {
       padding: 24px 0 0;
-      color: var(--muted);
+      color: rgba(36, 48, 94, 0.82);
       font-size: 0.9rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     header {
-      padding: 22px 0 38px;
+      padding: 18px 0 34px;
     }
 
     .hero {
-      padding: 42px clamp(20px, 4vw, 48px) 36px;
-      background: linear-gradient(145deg, rgba(255, 251, 243, 0.84), rgba(255, 247, 235, 0.68));
-      border: 1px solid rgba(217, 207, 190, 0.92);
+      background:
+        linear-gradient(135deg, rgba(247, 108, 108, 0.94), rgba(247, 108, 108, 0.86) 56%, rgba(248, 233, 161, 0.92));
+      border: 1px solid rgba(36, 48, 94, 0.12);
       border-radius: 28px;
       box-shadow: var(--shadow);
+      padding: 36px clamp(20px, 4vw, 44px);
       position: relative;
       overflow: hidden;
-      animation: reveal 0.7s ease-out both;
     }
 
-    .hero::before {
+    .hero::after {
       content: "";
       position: absolute;
-      inset: auto -60px -80px auto;
       width: 280px;
       height: 280px;
-      background: radial-gradient(circle, rgba(159, 62, 45, 0.14), transparent 70%);
+      right: -70px;
+      top: -80px;
+      border-radius: 50%;
+      background: rgba(168, 208, 230, 0.28);
       pointer-events: none;
     }
 
@@ -80,31 +82,34 @@
       margin-bottom: 16px;
       padding: 6px 12px;
       border-radius: 999px;
-      border: 1px solid var(--line);
-      color: var(--muted);
+      border: 1px solid rgba(36, 48, 94, 0.2);
+      background: rgba(255,255,255,0.2);
+      color: var(--navy);
       font-size: 0.8rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
+      font-weight: 800;
     }
 
     h1, h2, h3 {
       margin: 0;
       font-family: "Fraunces", Georgia, serif;
-      line-height: 1.08;
+      line-height: 1.06;
       font-weight: 700;
     }
 
     h1 {
-      font-size: clamp(2.5rem, 6vw, 4.7rem);
       max-width: 12ch;
+      font-size: clamp(2.4rem, 6vw, 4.9rem);
       letter-spacing: -0.04em;
+      color: var(--navy);
     }
 
     .standfirst {
       max-width: 66ch;
       margin: 18px 0 0;
+      color: rgba(36, 48, 94, 0.95);
       font-size: 1.08rem;
-      color: #3f3a35;
     }
 
     main {
@@ -115,8 +120,7 @@
     .story-block,
     .ending,
     .sources {
-      animation: reveal 0.7s ease-out both;
-      animation-delay: 0.1s;
+      animation: reveal 0.65s ease-out both;
     }
 
     .lede {
@@ -127,27 +131,37 @@
     }
 
     .lede-card,
-    .note-card {
-      background: rgba(255, 251, 243, 0.82);
-      border: 1px solid rgba(217, 207, 190, 0.9);
+    .note-card,
+    figure,
+    .ending,
+    .sources {
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .lede-card,
+    .ending,
+    .sources {
+      background: var(--paper);
+      padding: 24px;
     }
 
     .note-card {
-      background: linear-gradient(180deg, rgba(32, 52, 79, 0.96), rgba(28, 43, 63, 0.96));
-      color: #edf2f9;
-      border-color: rgba(32, 52, 79, 0.35);
+      background: linear-gradient(180deg, rgba(36, 48, 94, 0.98), rgba(55, 71, 133, 0.97));
+      color: #f8fbff;
+      padding: 24px;
     }
 
     .note-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.24rem;
       margin-bottom: 10px;
+      color: var(--cream);
     }
 
     .story-block {
-      margin: 28px 0 42px;
+      margin: 30px 0 42px;
     }
 
     .story-text {
@@ -163,21 +177,17 @@
     figure {
       margin: 0;
       background: var(--paper);
-      border: 1px solid rgba(217, 207, 190, 0.92);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
     }
 
     figure img {
       width: 100%;
       display: block;
-      background: #101b31;
+      background: var(--navy);
     }
 
     .media-wrap {
       padding: 16px;
-      background: linear-gradient(180deg, rgba(255, 251, 243, 0.62), rgba(248, 241, 229, 0.82));
+      background: linear-gradient(180deg, rgba(168, 208, 230, 0.26), rgba(248, 233, 161, 0.22));
     }
 
     #plotly-story {
@@ -185,7 +195,7 @@
       height: 720px;
       border-radius: 16px;
       overflow: hidden;
-      background: #13253b;
+      background: var(--navy);
     }
 
     #story-map {
@@ -193,40 +203,50 @@
       height: 560px;
       border-radius: 16px;
       overflow: hidden;
-      background: #13253b;
-    }
-
-    .map-note {
-      margin-top: 10px;
-      color: #60574e;
-      font-size: 0.92rem;
+      background: var(--navy);
     }
 
     figcaption {
       padding: 18px 20px 22px;
-      border-top: 1px solid rgba(217, 207, 190, 0.92);
-      color: #443e38;
+      border-top: 1px solid var(--line);
+      color: #3b405d;
       font-size: 0.96rem;
+      background: rgba(255, 252, 244, 0.92);
     }
 
     .caption-label {
       display: inline-block;
       margin-bottom: 8px;
-      color: var(--accent);
+      color: var(--coral);
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 0.78rem;
     }
 
-    .ending,
-    .sources {
-      background: rgba(255, 251, 243, 0.82);
-      border: 1px solid rgba(217, 207, 190, 0.92);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin: 30px 0 0;
+    .map-note,
+    .status {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .map-note {
+      color: var(--muted);
+    }
+
+    .status {
+      color: #b14d4d;
+      min-height: 1.2em;
+    }
+
+    .story-map-label {
+      background: rgba(248, 233, 161, 0.95);
+      border: 1px solid rgba(36, 48, 94, 0.18);
+      border-radius: 10px;
+      color: var(--navy);
+      font: 700 12px "Manrope", sans-serif;
+      padding: 4px 8px;
+      box-shadow: 0 6px 16px rgba(36, 48, 94, 0.14);
     }
 
     .sources ul {
@@ -235,27 +255,21 @@
     }
 
     .sources a {
-      color: var(--accent);
+      color: var(--coral);
       text-decoration: none;
-    }
-
-    .status {
-      margin-top: 10px;
-      color: #b85740;
-      font-size: 0.88rem;
-      min-height: 1.2em;
+      font-weight: 700;
     }
 
     footer {
-      padding: 22px 0 46px;
-      color: var(--muted);
+      padding: 22px 0 44px;
+      color: rgba(36, 48, 94, 0.8);
       font-size: 0.9rem;
     }
 
     @keyframes reveal {
       from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(14px);
       }
       to {
         opacity: 1;
@@ -274,12 +288,8 @@
     }
 
     @media (max-width: 560px) {
-      header {
-        padding-top: 16px;
-      }
-
       .hero {
-        padding: 28px 18px 26px;
+        padding: 28px 18px;
       }
 
       .story-text {
@@ -291,7 +301,7 @@
       }
 
       #story-map {
-        height: 440px;
+        height: 460px;
       }
     }
   </style>
@@ -302,11 +312,12 @@
     <header>
       <section class="hero">
         <span class="eyebrow">Short Data Story</span>
-        <h1>Larceny theft in San Francisco follows a very specific rhythm</h1>
+        <h1>Drug offense records do not behave like a citywide map of drug use</h1>
         <p class="standfirst">
-          I focus on one crime type: <strong>Larceny Theft</strong>. In the combined SFPD incident dataset, it is one of the clearest examples
-          of how recorded crime concentrates instead of spreading evenly. The pattern is visible in three ways: a sharp break after the
-          late 2010s, a strong midday-to-evening rhythm, and a map that concentrates around a limited part of the city.
+          In San Francisco's incident records, <strong>Drug Offense</strong> is not evenly distributed. It is unusually concentrated in Tenderloin,
+          it dips during the COVID years, and its daily rhythm lines up surprisingly well with <strong>Warrant</strong> records. Taken together,
+          those patterns suggest that this category captures where drug activity and police attention meet in public, not a neutral measure of
+          how much drug use exists everywhere in the city.
         </p>
       </section>
     </header>
@@ -316,60 +327,57 @@
         <div class="lede-card">
           <h2>Dataset and framing</h2>
           <p>
-            The data comes from San Francisco Police Department incident reports that were cleaned and combined during the course.
-            Each row is a recorded incident, not a direct measure of victimization. That matters because changes in reporting, policing,
-            or record-keeping can move the numbers even when underlying behavior changes less.
+            The dataset combines San Francisco Police Department incident reports that we cleaned during the course. Each row is a recorded
+            police incident. That sounds straightforward, but for <em>Drug Offense</em> it matters a lot: this category depends heavily on where officers are present,
+            what they see, and what they choose to record.
           </p>
           <p>
-            I use <strong>Larceny Theft</strong> because it already stood out in my earlier analysis and because it makes the concentration pattern easy to see.
-            For the annual chart, I focus on 2018-2024, where this category is cleanest in the combined dataset. The goal of the page is not to explain every cause,
-            but to show where the pattern is strong and where interpretation has to stay careful.
+            That makes Drug Offense a good category for storytelling, because the pattern is strong, but it also makes interpretation tricky.
+            A high count does not automatically mean a neighborhood has more drug use than another one. It may also mean that enforcement is more concentrated there.
           </p>
         </div>
         <aside class="note-card">
-          <h3>Story claim</h3>
+          <h3>Question</h3>
           <p>
-            Larceny theft is not spread evenly across the city or across the day. In this dataset it clusters into specific years, peaks from late morning to evening,
-            and piles up in a small set of districts and hotspot cells.
+            If Drug Offense is an enforcement-shaped category, what would that look like in the data? I would expect concentration rather than even spread:
+            specific districts, specific street cells, and specific hours when officers are active.
           </p>
         </aside>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>1. Larceny theft breaks sharply after 2019</h2>
+          <h2>1. The category is both geographically extreme and sensitive to the COVID period</h2>
           <p>
-            The first figure starts with the simplest question: how much larceny theft is being recorded each year? The answer is not a smooth trend.
-            The category stays extremely high in 2018 and 2019, then drops hard in 2020 and never climbs back to that earlier level by 2024.
-            That alone makes the late-2010s period look unusual.
+            The first figure combines two facts that make Drug Offense hard to read as a simple citywide prevalence measure. On the left, the annual counts drop sharply in
+            2020 and stay low in 2021 before recovering later. That timing lines up with the COVID years, when mobility, street activity, and policing conditions all changed.
+            The drop is real in the recorded data, but it does not tell us by itself whether drug use fell by the same amount.
           </p>
           <p>
-            I do not want to overclaim what that break means. A drop in recorded theft does not automatically prove that theft opportunity or offender behavior changed by the same amount.
-            Pandemic-era closures, mobility changes, and reporting effects could all matter. Still, the recorded series clearly splits into a pre-2020 high period and a lower post-2020 one.
+            On the right, the geography is even more striking. Tenderloin's Drug Offense ratio is more than five times the citywide average, while most other districts sit near
+            or below the baseline. Even before looking at the map, the district view already says that this is not a citywide pattern with small local variation. It is a heavily concentrated one.
           </p>
         </div>
         <figure>
-          <img src="assets/images/story_yearly_trend.svg" alt="Bar chart of larceny theft counts from 2018 to 2024">
+          <img src="assets/images/story_yearly_trend.svg" alt="Two-panel chart showing Drug Offense annual counts and district concentration">
           <figcaption>
             <span class="caption-label">Figure 1</span>
-            Annual <em>Larceny Theft</em> counts for 2018-2024. The category is very high in 2018-2019, drops in 2020, and remains below its late-2010s level afterward.
-            This is the baseline for the rest of the story: later charts ask when and where this lower-but-still-concentrated theft pattern appears.
+            A static two-panel summary of <em>Drug Offense</em>. The left panel shows a clear drop in 2020-2021, consistent with a major break during the COVID period. The right panel shows that Tenderloin is an extreme outlier in district-level concentration, far above the citywide baseline.
           </figcaption>
         </figure>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>2. The category follows a strong daytime and evening cycle</h2>
+          <h2>2. Its daily rhythm looks more like police activity than nightlife chaos</h2>
           <p>
-            The annual chart shows a break across years, but it hides something just as important: <em>when</em> larceny theft is recorded. The interactive figure below shows
-            that the category is heavily concentrated from late morning into the evening, with particularly strong activity on Friday and Saturday.
-            Midnight and very early morning look relatively quiet by comparison.
+            The second figure explains why I do not read Drug Offense as a simple "street crime at night" category. The upper heatmap shows that incidents peak from late morning into
+            the afternoon, not after midnight. That is already unusual if the category were driven mainly by general nightlife opportunity.
           </p>
           <p>
-            This matters because it makes larceny theft look less like background noise and more like an activity linked to daily urban routines:
-            shopping hours, commute hours, nightlife spillover, and places where many potential targets pass through. The exact causes still need outside evidence,
-            but the timing pattern itself is too structured to call random.
+            The lower panel makes the story sharper by comparing Drug Offense with Warrant. In Assignment 1, this pair had the strongest weekly correlation I found
+            (<em>R</em><sup>2</sup> = 0.927). Here the hourly curves almost sit on top of each other. That is exactly what I would expect if both categories are often created by the same police encounter:
+            an officer stops someone, finds drugs, and also checks for outstanding warrants.
           </p>
         </div>
         <figure>
@@ -379,47 +387,47 @@
           </div>
           <figcaption>
             <span class="caption-label">Figure 2</span>
-            A two-panel Plotly figure for <em>Larceny Theft</em>. The upper heatmap shows how counts vary by weekday and hour, while the lower panel traces each weekday's hourly curve.
-            Both views point to the same conclusion: theft is concentrated in the active part of the day, especially toward the afternoon and early evening.
+            A Plotly figure with two views of <em>Drug Offense</em>. The heatmap shows that counts peak during daytime and afternoon hours across the week. The line chart below shows that Drug Offense and Warrant follow nearly the same hourly profile, which supports an enforcement-driven interpretation.
           </figcaption>
         </figure>
       </section>
 
       <section class="story-block">
         <div class="story-text">
-          <h2>3. The map shows that the pattern is spatial as well as temporal</h2>
+          <h2>3. At street level, the map collapses into a Tenderloin-centered hotspot</h2>
           <p>
-            The time pattern is matched by a space pattern. When larceny theft is aggregated into hotspot cells, the strongest locations do not spread evenly across San Francisco.
-            In the map below, bigger circles mean more incidents in the same small grid cell. Those large circles cluster in a limited part of the city, especially in the Central, Northern, and Southern districts and a few other high-activity areas.
+            The map pushes the same idea down to street scale. When I aggregate Drug Offense into hotspot cells, the strongest circles do not spread across the whole city. They collapse into
+            a tight cluster around the Tenderloin and nearby downtown blocks. That matches the district pattern from Figure 1 but makes it much more concrete.
           </p>
           <p>
-            I read this map as a warning against neighborhood averages. A district can have a lot of recorded theft without that meaning every block is equally exposed.
-            The assignment 1 power-law result already pointed in this direction, and the hotspot map makes the same point visually: a small number of places absorb a large share of incidents.
+            This is where outside context becomes useful. City reporting on open-air drug markets repeatedly points to the Tenderloin and South of Market as focus areas for enforcement and intervention.
+            That does not prove a one-to-one causal story, but it does make the recorded hotspot map easier to interpret: the category is likely showing where visible drug markets and concentrated policing overlap.
           </p>
         </div>
         <figure>
           <div class="media-wrap">
             <div id="story-map"></div>
             <div id="status-map" class="status"></div>
-            <div class="map-note">Circle size shows how many larceny theft incidents fell into each hotspot cell. Darker circles mark the strongest cells.</div>
+            <div class="map-note">Circle size shows incident count in one hotspot cell. The largest circles sit in the Tenderloin-centered cluster.</div>
           </div>
           <figcaption>
             <span class="caption-label">Figure 3</span>
-            Bubble hotspot map of <em>Larceny Theft</em> cells. The largest circles gather in a relatively small set of central-city locations instead of spreading uniformly across San Francisco,
-            making the concentration pattern much easier to see than a plain district average would.
+            Bubble hotspot map of <em>Drug Offense</em> cells. The strongest cells form a compact cluster near the Tenderloin and adjacent downtown area, not a diffuse pattern across San Francisco. That spatial concentration supports the idea that Drug Offense is a localized, enforcement-shaped record.
           </figcaption>
         </figure>
       </section>
 
       <section class="ending">
-        <h2>What the reader should take away</h2>
+        <h2>What I take away from this</h2>
         <p>
-          The main point is narrow on purpose. I am not claiming that larceny theft tells the whole story of crime in San Francisco, and I am not claiming that recorded counts map directly onto underlying theft behavior.
-          What I am claiming is simpler and more defensible: in this dataset, larceny theft is highly concentrated. It clusters into a specific recent period, a specific part of the day, and a specific set of hotspot areas.
+          If I only looked at the label <em>Drug Offense</em>, I might be tempted to read it as a direct map of where San Francisco's drug problem is worst. After looking at these three figures,
+          that reading feels too naive. The safer interpretation is that this category measures a very specific public-facing slice of the problem: places and times where drug activity becomes visible
+          to police and gets converted into an incident record.
         </p>
         <p>
-          That is why the category is interesting, but also why it needs caution. If someone wanted to turn this page into a policy argument, the next step would have to be outside evidence about retail activity, mobility, reporting, enforcement, and local context.
-          The figures here reveal structure. They do not, by themselves, prove the cause of that structure.
+          That is why the Tenderloin result is interesting without being the whole truth. The data does not show every form of drug use, and it certainly does not justify a simple claim like
+          "Tenderloin has five times more drug use than the rest of the city." What it does show, much more clearly, is where Drug Offense gets recorded, when it gets recorded, and why that recording process
+          needs to stay part of the story.
         </p>
       </section>
 
@@ -427,7 +435,8 @@
         <h2>Sources</h2>
         <ul>
           <li>San Francisco Police Department incident reports, combined 2003-present course dataset.</li>
-          <li>Basemap tiles from OpenStreetMap contributors.</li>
+          <li>Rashida Richardson, Jason Schultz, and Kate Crawford, <a href="https://read-me.org/more-crime-prevention/2023/5/28/dirty-data-bad-predictions-how-civil-rights-violations-impact-police-data-predictive-policing-systems-and-justice">Dirty Data, Bad Predictions</a>.</li>
+          <li>SF.gov, <a href="https://www.sf.gov/news--san-francisco-issues-three-month-update-operation-dismantle-open-air-drug-markets">Three-Month Update on Operation to Dismantle Open-Air Drug Markets</a>.</li>
         </ul>
       </section>
     </main>
@@ -439,7 +448,6 @@
 
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script>
     function setStatus(id, text) {
       document.getElementById(id).textContent = text || "";
@@ -455,38 +463,50 @@
 
     async function drawPlotlyStory() {
       try {
-        const temporal = await loadJson("data/larceny_temporal_story.json");
+        const temporal = await loadJson("data/drug_temporal_story.json");
 
-        const traces = [{
-          type: "heatmap",
-          z: temporal.z,
-          x: temporal.hours,
-          y: temporal.weekdays,
-          colorscale: "YlOrRd",
-          hovertemplate: "%{y}<br>%{x}<br>Incidents: %{z}<extra></extra>",
-          xaxis: "x",
-          yaxis: "y"
-        }];
-
-        temporal.series.forEach((series) => {
-          traces.push({
+        Plotly.newPlot("plotly-story", [
+          {
+            type: "heatmap",
+            z: temporal.z,
+            x: temporal.hours,
+            y: temporal.weekdays,
+            colorscale: [
+              [0.0, "#F8E9A1"],
+              [0.45, "#F76C6C"],
+              [1.0, "#374785"]
+            ],
+            hovertemplate: "%{y}<br>%{x}<br>Drug Offense: %{z}<extra></extra>",
+            xaxis: "x",
+            yaxis: "y"
+          },
+          {
             type: "scatter",
             mode: "lines",
-            name: series.name,
+            name: "Drug Offense",
             x: temporal.hours,
-            y: series.values,
-            hovertemplate: "%{fullData.name}<br>%{x}: %{y}<extra></extra>",
+            y: temporal.drug_norm,
+            line: { color: "#F76C6C", width: 3.2 },
+            hovertemplate: "Drug Offense<br>%{x}<br>Normalized level: %{y:.2f}<extra></extra>",
             xaxis: "x2",
-            yaxis: "y2",
-            line: { width: 2.4 }
-          });
-        });
-
-        Plotly.newPlot("plotly-story", traces, {
-          paper_bgcolor: "#13253b",
-          plot_bgcolor: "#13253b",
-          font: { color: "#edf2f9", family: "Manrope, sans-serif" },
-          margin: { l: 64, r: 28, t: 26, b: 54 },
+            yaxis: "y2"
+          },
+          {
+            type: "scatter",
+            mode: "lines",
+            name: "Warrant",
+            x: temporal.hours,
+            y: temporal.warrant_norm,
+            line: { color: "#A8D0E6", width: 3.2 },
+            hovertemplate: "Warrant<br>%{x}<br>Normalized level: %{y:.2f}<extra></extra>",
+            xaxis: "x2",
+            yaxis: "y2"
+          }
+        ], {
+          paper_bgcolor: "#24305E",
+          plot_bgcolor: "#24305E",
+          font: { color: "#F8E9A1", family: "Manrope, sans-serif" },
+          margin: { l: 72, r: 24, t: 32, b: 54 },
           legend: {
             orientation: "h",
             yanchor: "bottom",
@@ -502,42 +522,43 @@
           xaxis: {
             title: "Hour of day",
             tickangle: -35,
-            gridcolor: "#2a4364",
+            gridcolor: "#5164A8",
             zeroline: false
           },
           yaxis: {
             title: "Weekday",
-            gridcolor: "#2a4364",
+            gridcolor: "#5164A8",
             zeroline: false,
             automargin: true
           },
           xaxis2: {
             title: "Hour of day",
             tickangle: -35,
-            gridcolor: "#2a4364",
+            gridcolor: "#5164A8",
             zeroline: false
           },
           yaxis2: {
-            title: "Incident count",
-            gridcolor: "#2a4364",
-            zeroline: false
+            title: "Normalized level",
+            gridcolor: "#5164A8",
+            zeroline: false,
+            range: [0, 1.05]
           },
           annotations: [{
-            text: "When larceny theft happens",
+            text: "Drug Offense over the week",
             x: 0,
             xref: "paper",
-            y: 1.09,
+            y: 1.08,
             yref: "paper",
             showarrow: false,
-            font: { size: 14, color: "#edf2f9" }
+            font: { size: 14, color: "#F8E9A1" }
           }, {
-            text: "How the weekday curves differ",
+            text: "Drug Offense vs Warrant by hour",
             x: 0,
             xref: "paper",
-            y: 0.42,
+            y: 0.43,
             yref: "paper",
             showarrow: false,
-            font: { size: 14, color: "#edf2f9" }
+            font: { size: 14, color: "#F8E9A1" }
           }]
         }, {
           responsive: true,
@@ -552,10 +573,10 @@
     async function drawStoryMap() {
       const map = L.map("story-map", {
         zoomControl: true,
-        minZoom: 10,
+        minZoom: 12,
         maxZoom: 17,
         scrollWheelZoom: false
-      }).setView([37.7749, -122.4194], 12);
+      }).setView([37.781, -122.416], 13);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
@@ -563,46 +584,57 @@
       }).addTo(map);
 
       try {
-        const hot = await loadJson("data/larceny_hotspots.json");
+        const hot = await loadJson("data/drug_hotspots.json");
+        const topPoints = hot.points.slice(0, 80);
         const max = hot.max || 1;
-        const topPoints = hot.points.slice(0, 120);
 
         const bounds = L.latLngBounds(topPoints.map((point) => [point.lat, point.lon]));
-        map.fitBounds(bounds.pad(0.18));
+        map.fitBounds(bounds.pad(0.15));
 
         topPoints.forEach((point, index) => {
-          const radius = 4 + Math.sqrt(point.count / max) * 20;
-          const fill = index < 10 ? "#8c1d18" : index < 40 ? "#bd5f35" : "#d98952";
+          const radius = 5 + Math.sqrt(point.count / max) * 24;
+          const fill = index < 12 ? "#F76C6C" : "#374785";
           L.circleMarker([point.lat, point.lon], {
             radius,
-            color: "#f8e7cd",
-            weight: 1,
+            color: "#F8E9A1",
+            weight: 1.3,
             fillColor: fill,
             fillOpacity: 0.62
           })
-            .bindPopup("Hotspot cell<br>Incidents: " + point.count.toLocaleString())
+            .bindPopup("Drug Offense hotspot<br>Incidents: " + point.count.toLocaleString())
             .addTo(map);
         });
+
+        const tenderloinLabel = L.marker([37.7835, -122.4162], {
+          interactive: false,
+          opacity: 0
+        }).addTo(map);
+        tenderloinLabel.bindTooltip("Tenderloin core", {
+          permanent: true,
+          direction: "top",
+          className: "story-map-label",
+          offset: [0, -8]
+        }).openTooltip();
 
         const legend = L.control({ position: "topright" });
         legend.onAdd = function () {
           const div = L.DomUtil.create("div");
-          div.style.background = "rgba(255,251,243,0.92)";
-          div.style.border = "1px solid #d9cfbe";
+          div.style.background = "rgba(248,233,161,0.94)";
+          div.style.border = "1px solid rgba(36,48,94,0.18)";
           div.style.borderRadius = "12px";
           div.style.padding = "10px 12px";
-          div.style.boxShadow = "0 8px 24px rgba(63, 44, 24, 0.14)";
-          div.style.color = "#1f1d1a";
+          div.style.boxShadow = "0 8px 24px rgba(36,48,94,0.18)";
+          div.style.color = "#24305E";
           div.style.font = "12px Manrope, sans-serif";
           div.innerHTML =
-            "<strong style='display:block;margin-bottom:6px;'>Hotspot strength</strong>" +
-            "<div style='margin-bottom:4px;'>Large circle = more incidents in one cell</div>" +
-            "<div>Showing the top 120 hotspot cells</div>";
+            "<strong style='display:block;margin-bottom:6px;'>Hotspot cells</strong>" +
+            "<div style='margin-bottom:4px;'>Bigger circle = more incidents</div>" +
+            "<div>Showing top 80 cells only</div>";
           return div;
         };
         legend.addTo(map);
 
-        setStatus("status-map", "Showing top " + topPoints.length.toLocaleString() + " hotspot cells. Open a circle to see its count.");
+        setStatus("status-map", "Showing the top " + topPoints.length.toLocaleString() + " Drug Offense hotspot cells.");
       } catch (error) {
         console.error(error);
         setStatus("status-map", "Map data failed to load.");
