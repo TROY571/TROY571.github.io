@@ -211,7 +211,8 @@ def make_temporal_plot(df: pd.DataFrame) -> None:
         col=1,
     )
 
-    fig.update_xaxes(title_text="Hour of day", tickangle=-35, gridcolor=PALETTE["line"], zeroline=False)
+    fig.update_xaxes(title_text="", tickangle=-35, gridcolor=PALETTE["line"], zeroline=False, row=1, col=1)
+    fig.update_xaxes(title_text="Hour of day", tickangle=-35, gridcolor=PALETTE["line"], zeroline=False, row=2, col=1)
     fig.update_yaxes(title_text="Weekday", gridcolor=PALETTE["line"], zeroline=False, row=1, col=1)
     fig.update_yaxes(title_text="Normalized level", range=[0, 1.05], gridcolor=PALETTE["line"], zeroline=False, row=2, col=1)
     fig.update_layout(
