@@ -196,6 +196,12 @@
       background: #13253b;
     }
 
+    .map-note {
+      margin-top: 10px;
+      color: #60574e;
+      font-size: 0.92rem;
+    }
+
     figcaption {
       padding: 18px 20px 22px;
       border-top: 1px solid rgba(217, 207, 190, 0.92);
@@ -383,8 +389,8 @@
         <div class="story-text">
           <h2>3. The map shows that the pattern is spatial as well as temporal</h2>
           <p>
-            The time pattern is matched by a space pattern. When larceny theft is aggregated into hotspot cells, the heatmap does not light up the whole city evenly.
-            Instead, it concentrates into a relatively small number of cells, especially in the Central, Northern, and Southern districts and a few other high-activity areas.
+            The time pattern is matched by a space pattern. When larceny theft is aggregated into hotspot cells, the strongest locations do not spread evenly across San Francisco.
+            In the map below, bigger circles mean more incidents in the same small grid cell. Those large circles cluster in a limited part of the city, especially in the Central, Northern, and Southern districts and a few other high-activity areas.
           </p>
           <p>
             I read this map as a warning against neighborhood averages. A district can have a lot of recorded theft without that meaning every block is equally exposed.
@@ -395,11 +401,12 @@
           <div class="media-wrap">
             <div id="story-map"></div>
             <div id="status-map" class="status"></div>
+            <div class="map-note">Circle size shows how many larceny theft incidents fell into each hotspot cell. Darker circles mark the strongest cells.</div>
           </div>
           <figcaption>
             <span class="caption-label">Figure 3</span>
-            Heatmap of <em>Larceny Theft</em> hotspot cells. The strongest intensity is confined to a limited part of the city rather than spread across San Francisco,
-            reinforcing the central claim of the story: this crime is concentrated in both time and space.
+            Bubble hotspot map of <em>Larceny Theft</em> cells. The largest circles gather in a relatively small set of central-city locations instead of spreading uniformly across San Francisco,
+            making the concentration pattern much easier to see than a plain district average would.
           </figcaption>
         </figure>
       </section>
@@ -558,21 +565,44 @@
       try {
         const hot = await loadJson("data/larceny_hotspots.json");
         const max = hot.max || 1;
-        const heatPoints = hot.points.map((point) => [point.lat, point.lon, Math.max(0.08, point.count / max)]);
+        const topPoints = hot.points.slice(0, 120);
 
-        L.heatLayer(heatPoints, {
-          radius: 17,
-          blur: 14,
-          maxZoom: 16,
-          gradient: {
-            0.2: "#f7d08a",
-            0.45: "#e59b5a",
-            0.7: "#bd5f35",
-            1.0: "#7d1f21"
-          }
-        }).addTo(map);
+        const bounds = L.latLngBounds(topPoints.map((point) => [point.lat, point.lon]));
+        map.fitBounds(bounds.pad(0.18));
 
-        setStatus("status-map", "Hotspot cells loaded: " + hot.points.length.toLocaleString());
+        topPoints.forEach((point, index) => {
+          const radius = 4 + Math.sqrt(point.count / max) * 20;
+          const fill = index < 10 ? "#8c1d18" : index < 40 ? "#bd5f35" : "#d98952";
+          L.circleMarker([point.lat, point.lon], {
+            radius,
+            color: "#f8e7cd",
+            weight: 1,
+            fillColor: fill,
+            fillOpacity: 0.62
+          })
+            .bindPopup("Hotspot cell<br>Incidents: " + point.count.toLocaleString())
+            .addTo(map);
+        });
+
+        const legend = L.control({ position: "topright" });
+        legend.onAdd = function () {
+          const div = L.DomUtil.create("div");
+          div.style.background = "rgba(255,251,243,0.92)";
+          div.style.border = "1px solid #d9cfbe";
+          div.style.borderRadius = "12px";
+          div.style.padding = "10px 12px";
+          div.style.boxShadow = "0 8px 24px rgba(63, 44, 24, 0.14)";
+          div.style.color = "#1f1d1a";
+          div.style.font = "12px Manrope, sans-serif";
+          div.innerHTML =
+            "<strong style='display:block;margin-bottom:6px;'>Hotspot strength</strong>" +
+            "<div style='margin-bottom:4px;'>Large circle = more incidents in one cell</div>" +
+            "<div>Showing the top 120 hotspot cells</div>";
+          return div;
+        };
+        legend.addTo(map);
+
+        setStatus("status-map", "Showing top " + topPoints.length.toLocaleString() + " hotspot cells. Open a circle to see its count.");
       } catch (error) {
         console.error(error);
         setStatus("status-map", "Map data failed to load.");
