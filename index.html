@@ -176,6 +176,7 @@
     figure {
       margin: 0;
       background: var(--paper);
+      transition: transform 180ms ease, box-shadow 180ms ease;
     }
 
     figure img,
@@ -184,6 +185,7 @@
       display: block;
       border: 0;
       background: var(--navy);
+      transition: transform 220ms ease;
     }
 
     .frame-shell {
@@ -207,6 +209,16 @@
       color: #3b405d;
       font-size: 0.96rem;
       background: rgba(255, 252, 244, 0.92);
+    }
+
+    figure:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 54px rgba(36, 48, 94, 0.2);
+    }
+
+    figure:hover img,
+    figure:hover iframe {
+      transform: scale(1.015);
     }
 
     .caption-label {
@@ -397,7 +409,6 @@
         <h2>Sources</h2>
         <ul>
           <li>San Francisco Police Department incident reports, combined 2003-present course dataset.</li>
-          <li>Rashida Richardson, Jason Schultz, and Kate Crawford, <a href="https://nyulawreview.org/online-features/dirty-data-bad-predictions-how-civil-rights-violations-impact-police-data-predictive-policing-systems-and-justice/">Dirty Data, Bad Predictions</a>.</li>
           <li>SF.gov, <a href="https://www.sf.gov/news--san-francisco-issues-three-month-update-operation-dismantle-open-air-drug-markets">Three-Month Update on Operation to Dismantle Open-Air Drug Markets</a>.</li>
         </ul>
       </section>
