@@ -261,7 +261,7 @@ def make_hotspot_map(df: pd.DataFrame) -> None:
         .size()
         .reset_index(name="count")
     )
-    yearly_top = cells.sort_values(["year", "count"], ascending=[True, False]).groupby("year").head(140).reset_index(drop=True)
+    yearly_top = cells.sort_values(["year", "count"], ascending=[True, False]).groupby("year").head(650).reset_index(drop=True)
     max_count = yearly_top["count"].max()
     frames = []
     labels = []
@@ -272,79 +272,22 @@ def make_hotspot_map(df: pd.DataFrame) -> None:
         labels.append(str(year))
 
     center = [yearly_top["lat_cell"].median(), yearly_top["lon_cell"].median()]
-    m = folium.Map(location=center, zoom_start=12, tiles="CartoDB positron")
-
-    title_html = """
-    <div style="
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999999;
-      background: rgba(247, 242, 232, 0.94);
-      color: #24305E;
-      padding: 10px 16px;
-      border: 1px solid rgba(36,48,94,0.14);
-      border-radius: 12px;
-      font: 700 20px Fraunces, Georgia, serif;
-      box-shadow: 0 10px 24px rgba(36,48,94,0.12);
-    ">
-      Drug Offense hotspots by year, 2003-2025
-    </div>
-    """
-    subtitle_html = """
-    <div style="
-      position: fixed;
-      top: 58px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999998;
-      background: rgba(247, 242, 232, 0.88);
-      color: #24305E;
-      padding: 6px 12px;
-      border-radius: 10px;
-      font: 500 12px Manrope, Segoe UI, sans-serif;
-      box-shadow: 0 6px 18px rgba(36,48,94,0.1);
-    ">
-      HeatMapWithTime animation using the harmonized Drug Offense category. Darker cells indicate higher yearly concentration.
-    </div>
-    """
-    legend_html = """
-    <div style="
-      position: fixed;
-      bottom: 18px;
-      right: 18px;
-      z-index: 999999;
-      background: rgba(247, 242, 232, 0.94);
-      color: #24305E;
-      padding: 10px 12px;
-      border: 1px solid rgba(36,48,94,0.14);
-      border-radius: 12px;
-      font: 500 12px Manrope, Segoe UI, sans-serif;
-      box-shadow: 0 10px 24px rgba(36,48,94,0.12);
-      line-height: 1.45;
-    ">
-      <strong style="display:block; margin-bottom:6px;">How to read</strong>
-      Drag the slider or press play to move through years.<br>
-      Darker heat means stronger concentration that year.
-    </div>
-    """
-    m.get_root().html.add_child(folium.Element(title_html))
-    m.get_root().html.add_child(folium.Element(subtitle_html))
-    m.get_root().html.add_child(folium.Element(legend_html))
+    m = folium.Map(location=center, zoom_start=12, tiles="OpenStreetMap", control_scale=True)
 
     HeatMapWithTime(
         data=frames,
         index=labels,
-        radius=24,
+        radius=20,
         auto_play=False,
-        max_opacity=0.88,
-        min_opacity=0.08,
+        max_opacity=0.92,
+        min_opacity=0.18,
         use_local_extrema=False,
         gradient={
-            0.2: PALETTE["sky"],
-            0.55: PALETTE["coral"],
-            1.0: PALETTE["navy"],
+            0.18: "#77D2FF",
+            0.38: "#7ED957",
+            0.62: "#F8E45C",
+            0.84: "#F76C6C",
+            1.0: "#D64545",
         },
         position="bottomleft",
         display_index=True,
