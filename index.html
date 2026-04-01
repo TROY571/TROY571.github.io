@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TROY571 | Drug Offense Is a Concentrated Record</title>
-  <meta name="description" content="Assignment 2 data story: Drug Offense in San Francisco is concentrated in Tenderloin, disrupted during COVID, and closely aligned with Warrant records.">
+  <meta name="description" content="Assignment 2 data story: a harmonized Drug Offense category in San Francisco stays concentrated in Tenderloin across 2003-2025, breaks during COVID, and closely aligns with Warrant records.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -291,11 +291,11 @@
     <header>
       <section class="hero">
         <span class="eyebrow">Assignment 2</span>
-        <h1>Drug Offense in San Francisco is a concentrated record, not a citywide condition</h1>
+        <h1>Drug Offense in San Francisco stays concentrated even when I extend the story to the full 2003-2025 record</h1>
         <p class="standfirst">
-          I focus on <strong>2018-2024</strong>, where the category label is consistent and the COVID break is visible. Three views tell the same story:
-          <strong>Drug Offense</strong> is concentrated in Tenderloin, drops sharply during 2020-2021, and follows a daytime rhythm that almost matches
-          <strong>Warrant</strong>. That makes it look less like a neutral map of drug use and more like a record of where visible drug activity and police contact meet.
+          This version uses the full window from <strong>January 1, 2003 to December 31, 2025</strong>. Following the mapping in Assignment 1, I harmonize
+          <strong>DRUG/NARCOTIC</strong>, <strong>Drug Offense</strong>, and <strong>Drug Violation</strong> into one category. Across that longer history, the same pattern survives:
+          the category stays concentrated in <strong>Tenderloin</strong>, breaks sharply during the COVID years, and follows a daytime rhythm that closely tracks <strong>Warrant</strong>.
         </p>
       </section>
     </header>
@@ -305,13 +305,13 @@
         <div class="lede-card">
           <h2>Dataset and framing</h2>
           <p>
-            The dataset is the combined San Francisco Police Department incident file we worked with in Weeks 1-7. Each row is one recorded police incident.
-            That matters here, because a recorded <em>Drug Offense</em> is not the same thing as all drug use in a neighborhood. It depends on public visibility,
-            police presence, and enforcement choices.
+            The full dataset is the combined San Francisco Police Department incident file we worked with in Weeks 1-7. For this story I use the subset from
+            <strong>January 1, 2003 to December 31, 2025</strong>. Each row is one recorded police incident, and that matters here, because a recorded <em>Drug Offense</em> is not the
+            same thing as all drug use in a neighborhood. It depends on public visibility, police presence, and enforcement choices.
           </p>
           <p>
-            I chose this category because Assignment 1 already hinted that it behaves differently from broad property-crime categories. It is unusually concentrated in
-            one district, and it has a very strong relationship with <em>Warrant</em>. That made it a better storytelling candidate than a generic citywide trend.
+            To keep the category consistent across the whole period, I use the same harmonization rule as in Assignment 1: <em>Drug Offense</em> combines
+            <em>DRUG/NARCOTIC</em>, <em>Drug Offense</em>, and <em>Drug Violation</em>. I do the same kind of cleanup for district names and for <em>Warrant</em>, so the long-run figures are actually comparable.
           </p>
         </div>
         <aside class="note-card">
@@ -325,22 +325,22 @@
 
       <section class="story-block">
         <div class="story-text">
-          <h2>1. The first warning sign is how uneven the category already looks</h2>
+          <h2>1. The long-run view still points to concentration, not a smooth citywide trend</h2>
           <p>
-            I start with the simplest view: yearly counts and district concentration. The timing matters immediately. Drug Offense falls from 3,404 incidents in 2019
-            to 2,054 in 2021, then rebounds. Because that break lines up exactly with the COVID years, I do not think it can be read as a clean measure of how much
-            drug use changed underneath. Too many other things changed at the same time: mobility, street life, and policing patterns.
+            Once I extend the series back to 2003, the story actually gets stronger. The harmonized category is high in the mid-2000s, declines through the 2010s,
+            breaks again during 2020-2021, and rebounds by 2025. That is not the shape of a stable citywide background rate. It is a category that moves with history,
+            policing conditions, and the visibility of street activity.
           </p>
           <p>
-            The district panel is even more telling. Tenderloin's Drug Offense share is about five times the citywide baseline, while most districts sit below average.
-            That is not a gentle citywide gradient. It already looks like a selective recording process concentrated in one part of San Francisco.
+            The district panel makes the point spatially. Even after using the full 2003-2025 window, Tenderloin's Drug Offense share is still far above the citywide baseline.
+            Mission and Southern are elevated too, but they are nowhere near the same scale. So the concentration is not just a short COVID-era artifact. It is built into the longer record.
           </p>
         </div>
         <figure>
           <img src="assets/images/drug_story_static.png" alt="Matplotlib figure showing annual Drug Offense counts and district concentration ratios">
           <figcaption>
             <span class="caption-label">Figure 1</span>
-            Matplotlib static figure for 2018-2024. The left panel shows the sharp COVID-era drop in recorded Drug Offense incidents. The right panel shows that Tenderloin is an outlier, with a Drug Offense share roughly five times the citywide baseline. Together, the two panels show that this category is neither temporally stable nor evenly distributed.
+            Matplotlib static figure for the harmonized Drug Offense category from 2003-2025. The left panel shows a long decline from the 2000s, a sharp COVID-era break, and a later rebound. The right panel shows that Tenderloin remains the strongest district outlier even over the full time span. The pattern is both historical and highly localized.
           </figcaption>
         </figure>
       </section>
@@ -349,11 +349,11 @@
         <div class="story-text">
           <h2>2. The daily pattern looks more like police contact than nightlife</h2>
           <p>
-            The second figure adds time-of-day structure. The heatmap peaks from late morning into the afternoon across most weekdays. That is not what I would expect if
-            Drug Offense were mainly a general nightlife category. It looks much closer to a daytime street-enforcement rhythm.
+            The second figure keeps the same harmonized category but switches from long-run trend to daily rhythm. The heatmap peaks from late morning into the afternoon across
+            most weekdays. That is not what I would expect if Drug Offense were mainly a nightlife category. It looks much closer to a daytime street-enforcement rhythm.
           </p>
           <p>
-            The lower panel makes the point sharper by comparing Drug Offense with Warrant. In my Assignment 1 analysis, this pair had the strongest weekly relationship
+            The lower panel makes the point sharper by comparing Drug Offense with Warrant, also harmonized across old and new labels. In my Assignment 1 analysis, this pair had the strongest weekly relationship
             (<em>R</em><sup>2</sup> = 0.927). Their hourly curves almost overlap here as well. My reading is that these two categories often come out of the same police encounter:
             someone is stopped, drugs are found, and warrant status is checked at the same time.
           </p>
@@ -364,7 +364,7 @@
           </div>
           <figcaption>
             <span class="caption-label">Figure 2</span>
-            Plotly interactive figure. The weekday-hour heatmap shows that Drug Offense is a daytime and afternoon category. The line chart below shows that Drug Offense and Warrant have nearly the same hourly profile, which strengthens the interpretation that both are shaped by the same kinds of police encounters.
+            Plotly interactive figure for the harmonized 2003-2025 categories. The weekday-hour heatmap shows that Drug Offense is a daytime and afternoon category. The line chart below shows that Drug Offense and Warrant have nearly the same hourly profile, which strengthens the interpretation that both are shaped by the same kinds of police encounters.
           </figcaption>
         </figure>
       </section>
@@ -373,7 +373,7 @@
         <div class="story-text">
           <h2>3. At street scale, the map collapses into a Tenderloin-centered cluster</h2>
           <p>
-            The map is the spatial version of the same story. Once I aggregate Drug Offense into rounded street cells, the strongest hotspots do not spread across the city.
+            The map is the spatial version of the same story. Once I aggregate the harmonized Drug Offense category into rounded street cells, the strongest hotspots do not spread across the city.
             They cluster around the Tenderloin core and nearby downtown blocks. A small part of San Francisco accounts for a very large share of the recorded incidents.
           </p>
           <p>
@@ -387,7 +387,7 @@
           </div>
           <figcaption>
             <span class="caption-label">Figure 3</span>
-            Plotly hotspot map built from the top 80 rounded Drug Offense cells. The strongest cells form a compact Tenderloin-centered cluster rather than a diffuse citywide pattern. This is the clearest spatial evidence that the category is highly localized.
+            Plotly hotspot map built from the top 80 rounded Drug Offense cells in 2003-2025. The strongest cells form a compact Tenderloin-centered cluster rather than a diffuse citywide pattern. This is the clearest spatial evidence that the category is highly localized.
           </figcaption>
         </figure>
       </section>
@@ -395,13 +395,13 @@
       <section class="ending">
         <h2>Takeaway</h2>
         <p>
-          What makes this category interesting is that every figure points in the same direction. Drug Offense is concentrated in one district, concentrated in a small set
-          of street cells, and concentrated in a daytime schedule that mirrors Warrant.
+          What makes this category interesting is that the full-range version tells the same story as the short-range version. Drug Offense is concentrated in one district,
+          concentrated in a small set of street cells, and concentrated in a daytime schedule that mirrors Warrant.
         </p>
         <p>
-          So my conclusion is not "Tenderloin has five times more drug use." That would claim more than police incident data can support. A narrower conclusion fits the data
-          much better: in this dataset, Drug Offense behaves like a public, enforcement-shaped category. It tells us where drug activity becomes visible enough to be recorded,
-          not where all drug use exists.
+          So my conclusion is still not "Tenderloin has X times more drug use." That would claim more than police incident data can support. A narrower conclusion fits the data
+          much better: in this harmonized 2003-2025 record, Drug Offense behaves like a public, enforcement-shaped category. It tells us where drug activity becomes visible enough
+          to be recorded, not where all drug use exists.
         </p>
       </section>
 

@@ -35,6 +35,17 @@ WEEKDAY_ORDER = [
     "Sunday",
 ]
 
+CATEGORY_NORMALIZATION = {
+    "DRUG/NARCOTIC": "Drug Offense",
+    "DRUG OFFENSE": "Drug Offense",
+    "DRUG VIOLATION": "Drug Offense",
+    "Drug Offense": "Drug Offense",
+    "Drug Violation": "Drug Offense",
+    "WARRANTS": "Warrant",
+    "WARRANT": "Warrant",
+    "Warrant": "Warrant",
+}
+
 
 def load_story_frame() -> pd.DataFrame:
     df = pd.read_csv(
@@ -50,8 +61,9 @@ def load_story_frame() -> pd.DataFrame:
         ],
     )
     df["incident_date"] = pd.to_datetime(df["incident_date"])
-    df = df[df["incident_date"].dt.year.between(2018, 2024)].copy()
+    df = df[(df["incident_date"] >= "2003-01-01") & (df["incident_date"] <= "2025-12-31")].copy()
     df["police_district"] = df["police_district"].str.title()
+    df["crime_category"] = df["crime_category"].map(lambda value: CATEGORY_NORMALIZATION.get(value, value))
     df["hour"] = pd.to_datetime(df["incident_time"], format="%H:%M").dt.hour
     return df.dropna(subset=["crime_category", "incident_weekday", "police_district"])
 
@@ -61,7 +73,7 @@ def make_static_figure(df: pd.DataFrame) -> None:
     annual = (
         drug.groupby(drug["incident_date"].dt.year)
         .size()
-        .reindex(range(2018, 2025), fill_value=0)
+        .reindex(range(2003, 2026), fill_value=0)
     )
 
     city_share = len(drug) / len(df)
@@ -84,30 +96,42 @@ def make_static_figure(df: pd.DataFrame) -> None:
     fig, axes = plt.subplots(1, 2, figsize=(14, 6), dpi=180, gridspec_kw={"width_ratios": [1.02, 1.1]})
     fig.patch.set_facecolor(PALETTE["navy"])
 
-    left_colors = [PALETTE["sky"], PALETTE["sky"], PALETTE["coral"], PALETTE["coral"], "#8AA4D2", "#8AA4D2", "#8AA4D2"]
     ax = axes[0]
-    ax.bar(annual.index.astype(str), annual.values, color=left_colors, edgecolor=PALETTE["cream"], linewidth=0.9)
-    ax.set_title("Annual Drug Offense counts", loc="left", fontsize=16, fontweight="bold", pad=12)
+    ax.plot(annual.index, annual.values, color=PALETTE["sky"], linewidth=3.1, marker="o", markersize=4.5)
+    covid = annual.loc[2020:2021]
+    ax.scatter(covid.index, covid.values, color=PALETTE["coral"], s=60, zorder=4)
+    ax.axvspan(2019.5, 2021.5, color=PALETTE["coral"], alpha=0.12)
+    ax.fill_between(annual.index, annual.values, color=PALETTE["sky"], alpha=0.12)
+    ax.set_title("Annual Drug Offense counts, 2003-2025", loc="left", fontsize=16, fontweight="bold", pad=12)
     ax.grid(axis="y", color=PALETTE["line"], alpha=0.32, linewidth=1)
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{int(value):,}"))
-    for year, value in annual.items():
-        if year in (2020, 2021, 2023):
-            ax.text(str(year), value + 90, f"{value:,}", ha="center", va="bottom", fontsize=10, fontweight="bold")
+    ax.set_xticks([2003, 2006, 2009, 2012, 2015, 2018, 2021, 2025])
+    ax.text(2009, annual.loc[2009] + 260, f"{annual.loc[2009]:,}", ha="center", va="bottom", fontsize=10, fontweight="bold")
+    ax.text(2021, annual.loc[2021] - 220, f"{annual.loc[2021]:,}", ha="center", va="top", fontsize=10, fontweight="bold")
+    ax.text(2025, annual.loc[2025] + 190, f"{annual.loc[2025]:,}", ha="center", va="bottom", fontsize=10, fontweight="bold")
     ax.annotate(
-        "COVID drop",
-        xy=("2020", annual.loc[2020]),
-        xytext=(5.9, annual.max() * 0.74),
+        "2009 peak",
+        xy=(2009, annual.loc[2009]),
+        xytext=(2005.5, annual.max() * 0.95),
         textcoords="data",
         arrowprops={"arrowstyle": "-", "color": PALETTE["cream"], "lw": 1.2},
         fontsize=11,
     )
     ax.annotate(
-        "2021 low",
-        xy=("2021", annual.loc[2021]),
-        xytext=(6.85, annual.max() * 0.63),
+        "COVID drop",
+        xy=(2020, annual.loc[2020]),
+        xytext=(2015.4, annual.max() * 0.78),
+        textcoords="data",
+        arrowprops={"arrowstyle": "-", "color": PALETTE["cream"], "lw": 1.2},
+        fontsize=11,
+    )
+    ax.annotate(
+        "2025 rebound",
+        xy=(2025, annual.loc[2025]),
+        xytext=(2018.4, annual.max() * 0.58),
         textcoords="data",
         arrowprops={"arrowstyle": "-", "color": PALETTE["cream"], "lw": 1.2},
         fontsize=11,
@@ -127,7 +151,7 @@ def make_static_figure(df: pd.DataFrame) -> None:
         ax.text(value + 0.05, district, f"{value:.2f}x", va="center", ha="left", fontsize=11, fontweight="bold")
 
     fig.suptitle(
-        "Drug Offense breaks sharply in the COVID years and stays concentrated in Tenderloin",
+        "A harmonized Drug Offense category stays concentrated in Tenderloin across the full 2003-2025 record",
         fontsize=22,
         fontweight="heavy",
         y=1.02,
@@ -135,7 +159,7 @@ def make_static_figure(df: pd.DataFrame) -> None:
     fig.text(
         0.5,
         0.955,
-        "Focus years: 2018-2024. Left: annual counts. Right: district share relative to the citywide Drug Offense share.",
+        "Category harmonization follows Assignment 1: DRUG/NARCOTIC + Drug Offense + Drug Violation. Left: annual counts. Right: district share relative to the citywide Drug Offense share.",
         ha="center",
         fontsize=12,
         color=PALETTE["sky"],
@@ -270,7 +294,7 @@ def make_hotspot_map(df: pd.DataFrame) -> None:
             "tickfont": {"color": PALETTE["navy"]},
         },
         title={
-            "text": "Top 80 Drug Offense hotspot cells, 2018-2024",
+            "text": "Top 80 Drug Offense hotspot cells, 2003-2025",
             "x": 0.5,
             "xanchor": "center",
             "font": {"family": "Fraunces, serif", "size": 22, "color": PALETTE["navy"]},
