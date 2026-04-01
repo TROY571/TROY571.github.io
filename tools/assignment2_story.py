@@ -1,9 +1,10 @@
 from pathlib import Path
 
+import folium
 import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
+from folium.plugins import HeatMapWithTime
 from matplotlib.ticker import FuncFormatter
 from plotly.subplots import make_subplots
 
@@ -253,55 +254,106 @@ def make_temporal_plot(df: pd.DataFrame) -> None:
 
 def make_hotspot_map(df: pd.DataFrame) -> None:
     drug = df[df["crime_category"].eq("Drug Offense")].dropna(subset=["latitude", "longitude"]).copy()
+    drug["year"] = drug["incident_date"].dt.year
     cells = (
         drug.assign(lat_cell=drug["latitude"].round(3), lon_cell=drug["longitude"].round(3))
-        .groupby(["lat_cell", "lon_cell"])
+        .groupby(["year", "lat_cell", "lon_cell"])
         .size()
         .reset_index(name="count")
-        .sort_values("count", ascending=False)
-        .head(80)
     )
-    center = {"lat": cells["lat_cell"].median(), "lon": cells["lon_cell"].median()}
+    yearly_top = cells.sort_values(["year", "count"], ascending=[True, False]).groupby("year").head(140).reset_index(drop=True)
+    max_count = yearly_top["count"].max()
+    frames = []
+    labels = []
+    for year in range(2003, 2026):
+        frame = yearly_top[yearly_top["year"].eq(year)].copy()
+        frame["weight"] = frame["count"] / max_count
+        frames.append(frame[["lat_cell", "lon_cell", "weight"]].values.tolist())
+        labels.append(str(year))
 
-    fig = px.scatter_map(
-        cells,
-        lat="lat_cell",
-        lon="lon_cell",
-        size="count",
-        color="count",
-        size_max=34,
-        zoom=12.3,
-        center=center,
-        map_style="carto-positron",
-        color_continuous_scale=[
-            (0.0, PALETTE["sky"]),
-            (0.45, PALETTE["coral"]),
-            (1.0, PALETTE["navy"]),
-        ],
-        hover_data={"lat_cell": ":.3f", "lon_cell": ":.3f", "count": True},
-    )
-    fig.update_traces(
-        marker={"opacity": 0.72},
-        hovertemplate="Hotspot cell<br>Incidents: %{marker.color:.0f}<br>Lat: %{lat:.3f}<br>Lon: %{lon:.3f}<extra></extra>",
-    )
-    fig.update_layout(
-        height=650,
-        paper_bgcolor="#F7F2E8",
-        margin={"l": 16, "r": 16, "t": 58, "b": 16},
-        font={"family": "Manrope, sans-serif", "color": PALETTE["navy"], "size": 14},
-        coloraxis_colorbar={
-            "title": {"text": "Incidents", "font": {"color": PALETTE["navy"]}},
-            "tickfont": {"color": PALETTE["navy"]},
+    center = [yearly_top["lat_cell"].median(), yearly_top["lon_cell"].median()]
+    m = folium.Map(location=center, zoom_start=12, tiles="CartoDB positron")
+
+    title_html = """
+    <div style="
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999999;
+      background: rgba(247, 242, 232, 0.94);
+      color: #24305E;
+      padding: 10px 16px;
+      border: 1px solid rgba(36,48,94,0.14);
+      border-radius: 12px;
+      font: 700 20px Fraunces, Georgia, serif;
+      box-shadow: 0 10px 24px rgba(36,48,94,0.12);
+    ">
+      Drug Offense hotspots by year, 2003-2025
+    </div>
+    """
+    subtitle_html = """
+    <div style="
+      position: fixed;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999998;
+      background: rgba(247, 242, 232, 0.88);
+      color: #24305E;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font: 500 12px Manrope, Segoe UI, sans-serif;
+      box-shadow: 0 6px 18px rgba(36,48,94,0.1);
+    ">
+      HeatMapWithTime animation using the harmonized Drug Offense category. Darker cells indicate higher yearly concentration.
+    </div>
+    """
+    legend_html = """
+    <div style="
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 999999;
+      background: rgba(247, 242, 232, 0.94);
+      color: #24305E;
+      padding: 10px 12px;
+      border: 1px solid rgba(36,48,94,0.14);
+      border-radius: 12px;
+      font: 500 12px Manrope, Segoe UI, sans-serif;
+      box-shadow: 0 10px 24px rgba(36,48,94,0.12);
+      line-height: 1.45;
+    ">
+      <strong style="display:block; margin-bottom:6px;">How to read</strong>
+      Drag the slider or press play to move through years.<br>
+      Darker heat means stronger concentration that year.
+    </div>
+    """
+    m.get_root().html.add_child(folium.Element(title_html))
+    m.get_root().html.add_child(folium.Element(subtitle_html))
+    m.get_root().html.add_child(folium.Element(legend_html))
+
+    HeatMapWithTime(
+        data=frames,
+        index=labels,
+        radius=24,
+        auto_play=False,
+        max_opacity=0.88,
+        min_opacity=0.08,
+        use_local_extrema=False,
+        gradient={
+            0.2: PALETTE["sky"],
+            0.55: PALETTE["coral"],
+            1.0: PALETTE["navy"],
         },
-        title={
-            "text": "Top 80 Drug Offense hotspot cells, 2003-2025",
-            "x": 0.5,
-            "xanchor": "center",
-            "font": {"family": "Fraunces, serif", "size": 22, "color": PALETTE["navy"]},
-        },
-    )
+        position="bottomleft",
+        display_index=True,
+        index_steps=1,
+        speed_step=0.25,
+    ).add_to(m)
+
     MAP_HTML_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fig.write_html(MAP_HTML_PATH, include_plotlyjs="cdn", full_html=True)
+    m.save(MAP_HTML_PATH)
 
 
 def main() -> None:

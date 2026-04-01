@@ -373,21 +373,21 @@
         <div class="story-text">
           <h2>3. At street scale, the map collapses into a Tenderloin-centered cluster</h2>
           <p>
-            The map is the spatial version of the same story. Once I aggregate the harmonized Drug Offense category into rounded street cells, the strongest hotspots do not spread across the city.
-            They cluster around the Tenderloin core and nearby downtown blocks. A small part of San Francisco accounts for a very large share of the recorded incidents.
+            The map is now a year-by-year animation, which makes the spatial story easier to trust. Instead of looking at one pooled map, I can watch the hotspot move through time.
+            What stands out is not dramatic relocation. The heat stays centered around the Tenderloin and nearby downtown blocks for most of the record, even though the overall intensity changes from year to year.
           </p>
           <p>
-            Outside reporting helps here. City reporting on open-air drug market enforcement repeatedly points to Tenderloin and South of Market as focus areas. That does not
-            prove a single causal story, but it does make the hotspot pattern easier to interpret. The map looks like the overlap of visible street drug activity and sustained police attention.
+            The COVID years fit into that same picture. The animation weakens during 2020-2021, but the hotspot does not suddenly jump to another part of San Francisco. Outside reporting helps here:
+            city reporting on open-air drug market enforcement repeatedly points to Tenderloin and South of Market as focus areas. That does not prove a single causal story, but it does make the animated hotspot pattern easier to interpret.
           </p>
         </div>
         <figure>
           <div class="frame-shell">
-            <iframe class="map-frame" src="visualizations/drug_hotspot_map.html" title="Interactive Plotly hotspot map of Drug Offense cells in San Francisco"></iframe>
+            <iframe class="map-frame" src="visualizations/drug_hotspot_map.html" title="Interactive HeatMapWithTime animation of Drug Offense hotspots in San Francisco"></iframe>
           </div>
           <figcaption>
             <span class="caption-label">Figure 3</span>
-            Plotly hotspot map built from the top 80 rounded Drug Offense cells in 2003-2025. The strongest cells form a compact Tenderloin-centered cluster rather than a diffuse citywide pattern. This is the clearest spatial evidence that the category is highly localized.
+            Folium <em>HeatMapWithTime</em> animation for the harmonized Drug Offense category, shown year by year from 2003 to 2025. The hotspot intensity rises and falls across the years, including a visible weakening during the COVID period, but the spatial center stays concentrated around Tenderloin and nearby downtown blocks. That makes the long-run concentration much easier to see than a single static map.
           </figcaption>
         </figure>
       </section>
