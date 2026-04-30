@@ -1,409 +1,290 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TROY571 | What Drug Offense Records Really Show</title>
-  <meta name="description" content="Assignment 2 data story: drug offense records in San Francisco cluster in Tenderloin, dip during COVID, and move by hour almost the same way as Warrant records.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chicago Food Inspections, Retold</title>
+  <meta name="description" content="A magazine-style local prototype for the 02806 final project on Chicago food inspection failures, 2020-2025.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --cream: #F8E9A1;
-      --coral: #F76C6C;
-      --sky: #A8D0E6;
-      --indigo: #374785;
-      --navy: #24305E;
-      --paper: rgba(255, 250, 241, 0.92);
-      --ink: #24305E;
-      --muted: #49598e;
-      --line: rgba(36, 48, 94, 0.14);
-      --shadow: 0 20px 48px rgba(36, 48, 94, 0.16);
-      --radius: 24px;
-      --max: 980px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      font-family: "Manrope", "Segoe UI", sans-serif;
-      line-height: 1.75;
-      background:
-        radial-gradient(900px 440px at 0% 0%, rgba(248, 233, 161, 0.78), transparent 56%),
-        linear-gradient(180deg, rgba(168, 208, 230, 0.96) 0%, rgba(190, 221, 236, 0.92) 36%, rgba(238, 244, 250, 0.96) 100%);
-    }
-
-    .shell {
-      width: min(var(--max), 92vw);
-      margin: 0 auto;
-    }
-
-    .masthead {
-      padding: 24px 0 0;
-      color: rgba(36, 48, 94, 0.84);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    header {
-      padding: 18px 0 34px;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(36, 48, 94, 0.12);
-      border-radius: 30px;
-      box-shadow: var(--shadow);
-      padding: 36px clamp(20px, 4vw, 44px);
-      background: linear-gradient(135deg, rgba(247, 108, 108, 0.95), rgba(247, 108, 108, 0.88) 55%, rgba(248, 233, 161, 0.94));
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      right: -80px;
-      top: -92px;
-      border-radius: 50%;
-      background: rgba(168, 208, 230, 0.28);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(36, 48, 94, 0.2);
-      background: rgba(255, 255, 255, 0.22);
-      color: var(--navy);
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    h1, h2 {
-      margin: 0;
-      font-family: "Fraunces", Georgia, serif;
-      line-height: 1.07;
-      font-weight: 700;
-    }
-
-    h1 {
-      max-width: 12ch;
-      font-size: clamp(2.5rem, 6vw, 4.9rem);
-      letter-spacing: -0.04em;
-      color: var(--navy);
-    }
-
-    .standfirst {
-      max-width: 67ch;
-      margin: 18px 0 0;
-      color: rgba(36, 48, 94, 0.95);
-      font-size: 1.08rem;
-    }
-
-    main {
-      padding-bottom: 72px;
-    }
-
-    .lede,
-    .story-block,
-    .ending,
-    .sources {
-      animation: reveal 0.65s ease-out both;
-    }
-
-    .lede {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .lede-card,
-    .note-card,
-    figure,
-    .ending,
-    .sources {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .lede-card,
-    .ending,
-    .sources {
-      background: var(--paper);
-      padding: 24px;
-    }
-
-    .note-card {
-      background: linear-gradient(180deg, rgba(36, 48, 94, 0.98), rgba(55, 71, 133, 0.98));
-      color: #f8fbff;
-      padding: 24px;
-    }
-
-    .note-card h2 {
-      font-size: 1.24rem;
-      color: var(--cream);
-      margin-bottom: 10px;
-    }
-
-    .story-block {
-      margin: 30px 0 42px;
-    }
-
-    .story-text {
-      width: min(68ch, 100%);
-      margin: 0 auto 18px;
-      font-size: 1.02rem;
-    }
-
-    .story-text p {
-      margin: 0 0 14px;
-    }
-
-    figure {
-      margin: 0;
-      background: var(--paper);
-      transition: transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    figure img,
-    figure iframe {
-      width: 100%;
-      display: block;
-      border: 0;
-      background: var(--navy);
-      transition: transform 220ms ease;
-    }
-
-    .frame-shell {
-      padding: 16px;
-      background: linear-gradient(180deg, rgba(168, 208, 230, 0.24), rgba(248, 233, 161, 0.22));
-    }
-
-    .plot-frame {
-      height: 760px;
-      border-radius: 16px;
-    }
-
-    .map-frame {
-      height: 650px;
-      border-radius: 16px;
-    }
-
-    figcaption {
-      padding: 18px 20px 22px;
-      border-top: 1px solid var(--line);
-      color: #3b405d;
-      font-size: 0.96rem;
-      background: rgba(255, 252, 244, 0.92);
-    }
-
-    figure:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 28px 54px rgba(36, 48, 94, 0.2);
-    }
-
-    figure:hover img,
-    figure:hover iframe {
-      transform: scale(1.015);
-    }
-
-    .caption-label {
-      display: inline-block;
-      margin-bottom: 8px;
-      color: var(--coral);
-      font-weight: 800;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .sources ul {
-      margin: 10px 0 0;
-      padding-left: 1.2rem;
-    }
-
-    .sources a {
-      color: var(--coral);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    footer {
-      padding: 22px 0 44px;
-      color: rgba(36, 48, 94, 0.8);
-      font-size: 0.9rem;
-    }
-
-    @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 860px) {
-      .lede {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .hero {
-        padding: 28px 18px;
-      }
-
-      .story-text {
-        font-size: 0.98rem;
-      }
-
-      .plot-frame {
-        height: 860px;
-      }
-
-      .map-frame {
-        height: 520px;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles/site.css">
 </head>
 <body>
-  <div class="shell">
-    <div class="masthead">02806 Social Data Analysis and Visualization</div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <p>02806 Final Project / Group 10</p>
+      <p>Chicago food inspections / 2020-2025</p>
+    </div>
+  </header>
 
-    <header>
-      <section class="hero">
-        <span class="eyebrow">Assignment 2</span>
-        <h1>What drug offense records really show in San Francisco</h1>
-        <p class="standfirst">
-          I use the San Francisco police incident dataset from <strong>January 1, 2003 to December 31, 2025</strong>. I also merge
-          <strong>DRUG/NARCOTIC</strong>, <strong>Drug Offense</strong>, and <strong>Drug Violation</strong> into one label. Three things stand out.
-          The records cluster in <strong>Tenderloin</strong>. They drop during the COVID years. They also move by hour almost the same way as <strong>Warrant</strong>.
-        </p>
-      </section>
-    </header>
-
-    <main>
-      <section class="lede">
-        <div class="lede-card">
-          <h2>Dataset and framing</h2>
-          <p>
-            The full dataset is the combined San Francisco Police Department incident file we worked with in Weeks 1-7. For this story I use the subset from
-            <strong>January 1, 2003 to December 31, 2025</strong>. Each row is one recorded police incident, and that matters here, because a recorded <em>Drug Offense</em> is not the
-            same thing as drug use in a neighborhood. It depends on what happens in public and what police choose to record.
+  <main>
+    <section class="hero">
+      <div class="hero__grid">
+        <div>
+          <p class="eyebrow">Chicago food inspections, 2020-2025</p>
+          <h1>Chicago's failed inspections are not just a downtown story.</h1>
+        </div>
+        <div class="hero__side">
+          <p class="drop">
+            The raw numbers point to the busiest restaurant districts. The failure rates point to South Chicago, Auburn Gresham,
+            Avalon Park, and other places that are easier to miss.
           </p>
           <p>
-            To keep the category consistent across the whole period, I use the same harmonization rule as in Assignment 1: <em>Drug Offense</em> combines
-            <em>DRUG/NARCOTIC</em>, <em>Drug Offense</em>, and <em>Drug Violation</em>.
+            We merge Chicago food inspection records with community boundaries and hardship data. Then the question becomes:
+            which neighborhoods still have high failure rates after we account for how many inspections they received?
+          </p>
+          <p class="notebook-actions">
+            <a class="notebook-link" href="https://github.com/TROY571/TROY571.github.io/blob/main/notebooks/final_project.ipynb">View notebook on GitHub</a>
+            <a class="notebook-link" href="./notebooks/final_project.ipynb" download>Download .ipynb</a>
+          </p>
+          <a class="start-link" href="#story-start">Start</a>
+        </div>
+      </div>
+    </section>
+
+    <article class="story" id="story-start">
+      <section class="story-block story-block--lede">
+        <div class="story-block__text">
+          <p class="section-tag">The question</p>
+          <p>
+            Failed inspections are easy to count. They are harder to compare. A neighborhood with many restaurants will usually have
+            more inspections, and more inspections create more chances to fail.
+          </p>
+          <p>
+            So we read the data two ways. First, where did Chicago record the most failures? Second, where did inspections fail most
+            often after inspection volume is counted?
           </p>
         </div>
-        <aside class="note-card">
-          <h2>Question</h2>
+        <aside class="margin-note">
+          <p class="section-tag">Merge chain</p>
+          <ul>
+            <li>Food inspection records</li>
+            <li>Community area GeoJSON</li>
+            <li>Hardship index table</li>
+            <li>Time window: 2020-2025</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="stat-ledger" aria-label="Project summary statistics">
+        <div>
+          <span>87,172</span>
+          <p>food inspections used after cleaning</p>
+        </div>
+        <div>
+          <span>20,169</span>
+          <p>failed inspections from 2020 to 2025</p>
+        </div>
+        <div>
+          <span>23.1%</span>
+          <p>citywide fail rate across the study period</p>
+        </div>
+        <div>
+          <span>69</span>
+          <p>community areas kept for rate comparison</p>
+        </div>
+      </section>
+
+      <section class="story-block story-block--research">
+        <div class="story-block__text">
+          <p class="section-tag">Data and limits</p>
+          <h2>These records show inspection outcomes, not every kitchen condition in Chicago.</h2>
           <p>
-            If police contact shapes this category, what should the data look like? I would expect it to pile up in a few places, at a few hours, and shift when street life changes.
+            We start with City of Chicago food inspection records. Then we use the coordinates to place each inspection inside a
+            community area. After that, we compare raw failed inspections with failures per 100 inspections.
+          </p>
+          <p>
+            A failure rate here means failed inspections per 100 inspections. It is not a rate per resident, per meal, or per restaurant.
+            To avoid tiny-denominator noise, the rate comparison keeps community areas with at least 300 inspections from 2020 to 2025.
+          </p>
+          <p>
+            The hardship index is context, not a cause. A high hardship score does not explain a failed inspection by itself. It tells
+            us whether the high-rate communities also have higher levels of economic and social hardship.
+          </p>
+        </div>
+        <aside class="margin-note source-list">
+          <p class="section-tag">Sources</p>
+          <ul>
+            <li><a href="https://data.cityofchicago.org/d/4ijn-s7e5">City of Chicago Food Inspections</a></li>
+            <li><a href="https://data.cityofchicago.org/d/cauq-8yn6">Chicago Community Areas</a></li>
+            <li><a href="https://data.cityofchicago.org/d/5kdt-irec">Chicago Hardship Index</a></li>
+          </ul>
+          <p class="notebook-actions notebook-actions--dark">
+            <a class="notebook-link notebook-link--dark" href="https://github.com/TROY571/TROY571.github.io/blob/main/notebooks/final_project.ipynb">View notebook on GitHub</a>
+            <a class="notebook-link notebook-link--dark" href="./notebooks/final_project.ipynb" download>Download .ipynb</a>
           </p>
         </aside>
       </section>
 
-      <section class="story-block">
-        <div class="story-text">
-          <h2>1. The long view still points to the same place</h2>
-          <p>
-            Once I look back to 2003, the pattern does not get weaker. It gets clearer. The counts are high in the mid-2000s. They slide through the 2010s. They drop hard in 2020 and 2021. Then they climb again by 2025.
-            This does not look like a flat city trend. It looks like a category that moves with public life and police activity.
-          </p>
-          <p>
-            The district chart says the same thing in space. Tenderloin sits far above the rest. Mission and Southern are also high, but they are not close. So this is not a citywide pattern with small local differences. It is a hotspot story.
-          </p>
-        </div>
-        <figure>
-          <img src="assets/images/drug_story_static.png" alt="Matplotlib figure showing annual Drug Offense counts and district concentration ratios">
-          <figcaption>
-            <span class="caption-label">Figure 1</span>
-            Matplotlib figure for the harmonized Drug Offense category from 2003 to 2025. The line on the left shows a long decline, a sharp break in the COVID years, and a rebound by 2025. The bars on the right show how far Tenderloin stands above the city average. Read the two panels together. The category changes over time, but it also stays tightly concentrated.
-          </figcaption>
-        </figure>
-      </section>
+      <figure class="figure figure--full">
+        <img src="./assets/figures/figure1_citywide_food_safety_trend_2020_2025.png" alt="Citywide food safety trend from 2020 to 2025">
+        <figcaption>
+          <span>Citywide baseline</span>
+          Inspections rise from about 12,600 in 2020 to almost 16,000 in 2025, but the fail rate stays in a much narrower range.
+          This is the first reason raw totals need a denominator.
+        </figcaption>
+      </figure>
 
       <section class="story-block">
-        <div class="story-text">
-          <h2>2. The daily rhythm looks more like police work than nightlife</h2>
+        <div class="story-block__text">
+          <p class="section-tag">The first turn</p>
+          <h2>Near North Side leads the count. It does not lead the rate.</h2>
           <p>
-            The second figure shifts from years to hours. The heatmap is strongest from late morning to late afternoon on most weekdays. That surprised me. If this were mostly a nightlife pattern, I would expect much more activity after dark.
+            Near North Side has 1,343 failed inspections, more than any other community in the raw ranking. West Town, Near West Side,
+            Lake View, and the Loop follow close behind. These are busy restaurant areas, so the raw count starts there.
           </p>
           <p>
-            The line chart makes the point stronger, but it also needs care. Drug Offense and Warrant are different categories. This figure does not say they are the same crime, or that they always come from the same stop. It only shows that they rise and fall at similar hours. My reading is that both may be shaped by the same daytime policing pattern, and sometimes by the same encounter.
+            The rate ranking points somewhere else. South Chicago reaches 36.6 failed inspections per 100 inspections. Auburn Gresham
+            is almost the same at 36.2. Avalon Park is also high at 34.1. These communities are easy to miss if the story stops at raw counts.
           </p>
         </div>
-        <figure>
-          <div class="frame-shell">
-            <iframe class="plot-frame" src="visualizations/drug_temporal_story.html" title="Interactive Plotly figure showing Drug Offense heatmap and hourly comparison with Warrant"></iframe>
+      </section>
+
+      <figure class="figure figure--spread">
+        <img src="./assets/figures/figure2_raw_vs_rate_community_2020_2025.png" alt="Raw failed inspections versus failed inspections per 100 inspections across Chicago communities">
+        <figcaption>
+          <span>The main reversal</span>
+          The left panel is mostly about volume. The right panel is about failure rate. Near North Side dominates raw failures, while
+          South Chicago and Auburn Gresham lead after inspection volume is counted.
+        </figcaption>
+      </figure>
+
+      <blockquote class="pull-quote">
+        <p>A raw leaderboard sends us downtown. A rate leaderboard sends us south and west.</p>
+      </blockquote>
+
+      <section class="scrolly">
+        <div class="scrolly__graphic">
+          <iframe src="./assets/figures/figure5_community_fail_rate_map_2020_2025.html" title="Community fail rate map"></iframe>
+        </div>
+        <div class="scrolly__steps">
+          <div class="scrolly-step">
+            <p class="section-tag">The map</p>
+            <h2>The rate map makes the reversal visible.</h2>
+            <p>
+              The ranking change lands on the map. The strongest rates are not clustered around the same downtown communities that
+              dominate the raw totals.
+            </p>
           </div>
-          <figcaption>
-            <span class="caption-label">Figure 2</span>
-            Plotly figure for the harmonized 2003 to 2025 categories. The heatmap shows that Drug Offense is strongest in the day, not late at night. The line chart below shows that Drug Offense and Warrant follow a very similar hourly shape. That does not make them the same type of crime. It suggests that both may be shaped by similar policing routines and public encounters.
-          </figcaption>
-        </figure>
+          <div class="scrolly-step">
+            <p class="section-tag">What to notice</p>
+            <p>
+              South Chicago, Auburn Gresham, Englewood, West Garfield Park, and West Englewood stand out here. Not every South or West
+              Side community looks the same, but the high-rate map clearly moves away from downtown.
+            </p>
+          </div>
+          <div class="scrolly-step">
+            <p class="section-tag">Mapped rate view</p>
+            <p>
+              Hovering gives the exact values. Even without hovering, the main point is clear: this is not a map of restaurant volume.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section class="story-block">
-        <div class="story-text">
-          <h2>3. The map keeps pulling back to Tenderloin</h2>
+        <div class="story-block__text">
+          <p class="section-tag">The second check</p>
+          <h2>East Side makes the problem look persistent, not random.</h2>
           <p>
-            The animated map helps because it shows change without hiding location. The heat gets weaker in some years and stronger in others. But it keeps coming back to the same part of the city. Tenderloin and the blocks around it stay hot for most of the timeline.
+            A high fail rate could come from one bad period. Repeat failures are harder to wave away because they ask whether the same
+            establishments fail again.
           </p>
           <p>
-            The COVID dip shows up here too, but the center of the pattern does not move far. City reporting on open-air drug markets points to the same area. That does not prove a cause. It does make the map easier to read. The key point is persistence over time, not one dramatic frame.
+            East Side has the highest repeat-failure share, at 48.6 repeat-failing establishments per 100 establishments. Auburn Gresham,
+            Washington Heights, South Chicago, and Calumet Heights also sit near the top. That makes the pattern harder to treat as noise.
           </p>
         </div>
-        <figure>
-          <div class="frame-shell">
-            <iframe class="map-frame" src="visualizations/drug_hotspot_map.html" title="Interactive HeatMapWithTime animation of Drug Offense hotspots in San Francisco"></iframe>
-          </div>
+      </section>
+
+      <div class="paired-band">
+        <figure class="figure figure--column">
+          <img src="./assets/figures/figure3_repeat_fail_share_community_2020_2025.png" alt="Share of repeat failed inspections by community">
           <figcaption>
-            <span class="caption-label">Figure 3</span>
-            Folium <em>HeatMapWithTime</em> animation for the harmonized Drug Offense category from 2003 to 2025. Use the controls below the map to move year by year. The heat fades in the COVID years and comes back later. The center of the map stays near Tenderloin.
+            <span>Repeat failure check</span>
+            East Side, Auburn Gresham, Washington Heights, and South Chicago do not only show high fail rates. They also show high repeat-failure shares.
           </figcaption>
         </figure>
+        <figure class="figure figure--column">
+          <img src="./assets/figures/figure4_hardship_vs_fail_rate_2020_2025.png" alt="Relationship between hardship index and failed inspections per 100 inspections">
+          <figcaption>
+            <span>Context check</span>
+            Higher-hardship communities tend to have higher fail rates, but the pattern is not automatic. Avalon Park has a high fail rate without being among the highest-hardship communities. South Lawndale has high hardship but does not sit at the top of the fail-rate scale.
+          </figcaption>
+        </figure>
+      </div>
+
+      <section class="story-block">
+        <div class="story-block__text">
+          <p class="section-tag">Inspection mix</p>
+          <h2>Complaint inspections fail far more often than routine canvass inspections.</h2>
+          <p>
+            The city does not perform the same inspection mix every year. Canvass inspections make up the largest share, but complaint
+            inspections fail at 37.1 per 100 inspections. License re-inspections fail at only 8.4 per 100.
+          </p>
+          <p>
+            That matters because a yearly trend can shift when the inspection mix shifts. A year with more complaint inspections is not
+            directly comparable to a year dominated by routine canvass inspections.
+          </p>
+        </div>
       </section>
 
-      <section class="ending">
-        <h2>Takeaway</h2>
-        <p>
-          What I take from this is still fairly narrow. These records do not give me a clean map of where drug use is highest. They show where drug activity becomes public and gets recorded.
-        </p>
-        <p>
-          Tenderloin still matters most. It is where this category shows up again and again in the data. If police attention were spread evenly across the city, this pattern would point to far more drug offense in Tenderloin than in most other districts. This dataset cannot fully test that assumption. What it can say with confidence is simpler. Tenderloin is the clear center of recorded Drug Offense in San Francisco.
-        </p>
+      <figure class="figure figure--full">
+        <img src="./assets/figures/figure6_inspection_type_mix_2020_2025.png" alt="Mix of inspection types over time in Chicago food inspections">
+        <figcaption>
+          <span>Inspection mix warning</span>
+          Canvass inspections dominate the yearly mix, but complaint inspections have the highest fail rate. A year with more complaint-driven work can look worse before neighborhood conditions enter the picture.
+        </figcaption>
+      </figure>
+
+      <section class="scrolly scrolly--reverse">
+        <div class="scrolly__steps">
+          <div class="scrolly-step">
+            <p class="section-tag">The time layer</p>
+            <h2>The monthly view keeps returning to the same parts of the city.</h2>
+            <p>
+              The animation shows failed inspections month by month from 2020 to 2025. It answers a practical question: are these
+              places only hot once, or do they keep coming back?
+            </p>
+          </div>
+          <div class="scrolly-step">
+            <p class="section-tag">What to notice</p>
+            <p>
+              The intensity changes from month to month. The concentration does not disappear.
+            </p>
+          </div>
+          <div class="scrolly-step">
+            <p class="section-tag">Animated time view</p>
+            <p>
+              The same clusters keep coming back. They are not present every month at the same strength, but they do not vanish either.
+            </p>
+          </div>
+        </div>
+        <div class="scrolly__graphic">
+          <iframe src="./assets/figures/figure7_failed_inspections_timeheatmap_2020_2025.html" title="Failed inspections time heatmap"></iframe>
+        </div>
       </section>
 
-      <section class="sources">
-        <h2>Sources</h2>
-        <ul>
-          <li>San Francisco Police Department incident reports, combined 2003-present course dataset.</li>
-          <li>SF.gov, <a href="https://www.sf.gov/news--san-francisco-issues-three-month-update-operation-dismantle-open-air-drug-markets">Three-Month Update on Operation to Dismantle Open-Air Drug Markets</a>.</li>
-        </ul>
+      <section class="story-block story-block--outro" id="takeaway">
+        <div class="story-block__text">
+          <p class="section-tag">Takeaway</p>
+          <h2>The most checked places are not the places we would worry about first.</h2>
+          <p>
+            If we only count failed inspections, we end up downtown: Near North Side, West Town, Near West Side, Lake View, and the Loop.
+            But that is mostly where Chicago inspects a lot of restaurants. Once we divide by inspection volume, the places we would
+            look at first are South Chicago, Auburn Gresham, Avalon Park, East Side, and Englewood.
+          </p>
+          <p>
+            That is the conclusion of the project. The raw dataset makes downtown look like the center of the problem. The adjusted
+            data says the sharper food-safety concern is in communities where inspections fail more often, and in some cases fail again
+            at the same establishments.
+          </p>
+        </div>
       </section>
-    </main>
+    </article>
+  </main>
 
-    <footer>Built for the Assignment 2.</footer>
-  </div>
+  <script src="./assets/scripts/site.js"></script>
 </body>
 </html>
